@@ -1,7 +1,6 @@
 import javax.swing.JFrame;
 
-import Domain.Asteroid;
-import Domain.Sprite;
+
 
 class Game extends JFrame {
 

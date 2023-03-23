@@ -4,23 +4,30 @@ import java.util.TimerTask;
 
 import javax.swing.JPanel;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import Domain.Asteroid;
 import Domain.Defender;
+import Domain.Missile;
 import Domain.Sprite;
 
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class GameContainer extends JPanel{
+public class GameContainer extends JPanel implements MouseListener{
     
 
     List<Asteroid> asteroids = new ArrayList<>();
     List<Integer> replaceAsteroid = new ArrayList<>();
+    List<Missile> missiles = new ArrayList<>();
     Defender defender = new Defender(350, 350);
+    
 
-    public GameContainer(){
+    public GameContainer(){      
         super();
+        addMouseListener(this);
+
+
         addAsteroids();
         this.add(defender);
         Timer timer = new Timer();
@@ -30,7 +37,15 @@ public class GameContainer extends JPanel{
                 move();
             }
         };
+
+        TimerTask moveMissiles = new TimerTask() {
+            @Override
+            public void run() {
+                moveMissle();
+            }
+        };
         timer.schedule(move, 0, 500);
+        timer.schedule(moveMissiles, 0, 500);
     }
 
     public void addAsteroids(){
@@ -48,8 +63,6 @@ public class GameContainer extends JPanel{
     }
 
     private void move() {
-        
-        System.out.println("Asteroid size: " + asteroids.size());
         for(Asteroid a : asteroids){
             a.move();
             if(a.getXPosition() < -5 || a.getXPosition() > 700 || a.getYPosition() < -5 || a.getYPosition() > 700){
@@ -62,9 +75,19 @@ public class GameContainer extends JPanel{
             asteroids.add(i,generateAsteroid());
             
         }      
-        System.out.println("Asteroid size: " + asteroids.size());
         replaceAsteroid.clear();
         repaint();
+    }
+
+    private void moveMissle() {
+        for(Missile m : missiles){
+            m.move();
+            System.out.println("Missile moved");
+        }
+    
+        repaint();
+        
+        System.out.println("Missile moved " + missiles.size());
     }
 
 
@@ -101,6 +124,30 @@ public class GameContainer extends JPanel{
         // Create the asteroid with the generated position
        return new Asteroid(xPos, yPos, 50, new Sprite(null));
 
+    }
+
+
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println("Pew pew");
+        missiles.add(defender.shot(defender.getX(),defender.getY(),e.getX(), e.getY()));
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 
 

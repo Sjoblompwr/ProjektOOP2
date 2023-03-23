@@ -25,16 +25,19 @@ public class Defender extends JPanel{
     }
 
     public void draw(Graphics g) {
-        int[] xPoints = {100, 150, 200}; // X coordinates of the triangle vertices
-        int[] yPoints = {200, 100, 200}; // Y coordinates of the triangle vertices
+        int[] xPoints = {xPosition, xPosition + 5, xPosition + 10}; // X coordinates of the triangle vertices
+        int[] yPoints = {yPosition, yPosition - 10, yPosition}; // Y coordinates of the triangle vertices
         int numPoints = 3; // Number of vertices in the polygon
     
         g.drawPolygon(xPoints, yPoints, numPoints);
     }
     
 
-    public void shot() {
+    public Missile shot(int x, int y, int dx, int dy) {
         System.out.println("Defender: " + this.xPosition + " " + this.yPosition);
+        //x and y position of the defender to reach the point where the missile is shot
+      
+       return  new Missile(xPosition, yPosition,dx,dy);
     }
 
     public int getXPosition() {
