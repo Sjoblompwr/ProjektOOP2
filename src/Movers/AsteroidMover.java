@@ -71,7 +71,7 @@ public class AsteroidMover extends JPanel implements Runnable {
         }
 
         // Create the asteroid with the generated position
-       return new Asteroid(xPos, yPos, 50, new Sprite(null));
+       return new Asteroid(xPos, yPos, 50);
 
     }
 }

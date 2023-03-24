@@ -58,7 +58,7 @@ public class GameContainer extends JPanel implements MouseListener{
                 while (true) {
                     move();
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -72,7 +72,7 @@ public class GameContainer extends JPanel implements MouseListener{
                 while (true) {
                     moveMissle();
                     try {
-                        Thread.sleep(100);
+                        Thread.sleep(10);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -95,8 +95,9 @@ public class GameContainer extends JPanel implements MouseListener{
         super.paintComponent(g);
         for(Asteroid a : asteroids){
             a.draw(g);
-            defender.draw(g);
+
         }
+        defender.draw(g);
         for(Missile m : missiles){
             m.draw(g);
         }
@@ -110,9 +111,11 @@ public class GameContainer extends JPanel implements MouseListener{
             }
         }
         for(Integer i : replaceAsteroid){
+            System.out.println("Replace asteroid");
             this.remove(asteroids.get(i));
-            asteroids.remove(asteroids.get(i));
-            asteroids.add(i,generateAsteroid());
+            // asteroids.remove(asteroids.get(i));
+            // asteroids.add(i,generateAsteroid());
+            asteroids.set(i, generateAsteroid());
             
         }      
         replaceAsteroid.clear();
@@ -122,20 +125,27 @@ public class GameContainer extends JPanel implements MouseListener{
     private void moveMissle() {
         for(Missile m : missiles){
             m.move();
-            System.out.println("Missile moved");
+            for(Asteroid a : asteroids){
+                if(a.isPointInsidePolygon(m.getX(), m.getY())){
+                    System.out.println("Hit");
+                    replaceAsteroid.add(asteroids.indexOf(a));
+                    removeMissile.add(m);
+                }
+            }
+
             if(!m.isVisible()){
                 removeMissile.add(m);
             }
-            repaint();
+
         }
         for(Missile m : removeMissile){
             missiles.remove(m);
         }
         missiles.addAll(newMissiles);
         newMissiles.clear();
-    
+        repaint();
         
-        System.out.println("Missile moved " + missiles.size());
+       // System.out.println("Missile moved " + missiles.size());
     }
 
 
@@ -148,7 +158,7 @@ public class GameContainer extends JPanel implements MouseListener{
         double rand;
 
         int xPos, yPos;
-        for(Asteroid a : asteroids){}
+      
         rand = Math.random();
         // Determine which side the asteroid should appear from based on the random number
         if (rand < 0.25) {
@@ -170,7 +180,7 @@ public class GameContainer extends JPanel implements MouseListener{
         }
 
         // Create the asteroid with the generated position
-       return new Asteroid(xPos, yPos, 50, new Sprite(null));
+       return new Asteroid(xPos, yPos, 5);
 
     }
 
