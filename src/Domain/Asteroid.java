@@ -13,8 +13,8 @@ public class Asteroid extends JPanel {
 
     private int xPosition;
     private int yPosition;
-    private int xSpeed = 2; //5 means -2 to 2
-    private int ySpeed = 2;
+    private int xSpeed = 5; //5 means -2 to 2
+    private int ySpeed = 5;
     private int size;
 
     public Asteroid(int x, int y, int size) {

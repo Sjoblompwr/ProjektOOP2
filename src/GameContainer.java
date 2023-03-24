@@ -86,7 +86,7 @@ public class GameContainer extends JPanel implements MouseListener{
     }
 
     public void addAsteroids(){
-        for(int i = 0; i < 10; i++){
+        for(int i = 0; i < 20; i++){
             asteroids.add(generateAsteroid());
         }
     }
@@ -160,6 +160,7 @@ public class GameContainer extends JPanel implements MouseListener{
         int xPos, yPos;
       
         rand = Math.random();
+        System.out.println(rand);
         // Determine which side the asteroid should appear from based on the random number
         if (rand < 0.25) {
             // Left side of the game window
