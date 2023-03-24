@@ -22,14 +22,14 @@ public class Asteroid extends JPanel {
         this.size = size;
         this.sprite = sprite;
         setRandomInitialSpeed();
-        Timer timer = new Timer();
-        TimerTask move = new TimerTask() {
-            @Override
-            public void run() {
-                move();
-            }
-        };
-        timer.schedule(move, 0, 500);
+        // Timer timer = new Timer();
+        // TimerTask move = new TimerTask() {
+        //     @Override
+        //     public void run() {
+        //         move();
+        //     }
+        // };
+        // timer.schedule(move, 0, 500);
     }
 
     @Override

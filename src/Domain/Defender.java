@@ -1,5 +1,6 @@
 package Domain;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -28,7 +29,6 @@ public class Defender extends JPanel{
         int[] xPoints = {xPosition, xPosition + 5, xPosition + 10}; // X coordinates of the triangle vertices
         int[] yPoints = {yPosition, yPosition - 10, yPosition}; // Y coordinates of the triangle vertices
         int numPoints = 3; // Number of vertices in the polygon
-    
         g.drawPolygon(xPoints, yPoints, numPoints);
     }
     
@@ -36,8 +36,9 @@ public class Defender extends JPanel{
     public Missile shot(int x, int y, int dx, int dy) {
         System.out.println("Defender: " + this.xPosition + " " + this.yPosition);
         //x and y position of the defender to reach the point where the missile is shot
-      
-       return  new Missile(xPosition, yPosition,dx,dy);
+        Missile missile = new Missile(xPosition, yPosition, dx, dy);
+        return missile;
+       //return  new Missile(x, y,dx,dy);
     }
 
     public int getXPosition() {

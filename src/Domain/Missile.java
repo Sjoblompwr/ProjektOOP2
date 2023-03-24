@@ -1,7 +1,9 @@
 package Domain;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 
 import javax.swing.JPanel;
 
@@ -14,6 +16,7 @@ public class Missile extends JPanel{
     private int height;
     private int speed;
     private boolean visible;
+
     
     public Missile(int x, int y, int dx, int dy) {
         this.x = x;
@@ -22,7 +25,7 @@ public class Missile extends JPanel{
         this.dy = dy;
         this.width = 4;
         this.height = 4;
-        this.speed = 2;
+        this.speed = 20;
         this.visible = true;
     }
 
@@ -35,16 +38,33 @@ public class Missile extends JPanel{
     }
 
     public void draw(Graphics g) {
+        g.setColor(Color.BLACK);
         g.fillRect(x, y, width, height);
     }
     
     public void move() {
+        Point thirdPoint = calculateThirdPoint(new Point(x, y), new Point(dx, dy)); // calculate the third point
+        dx = (int) thirdPoint.getX(); // set the new x coordinate
+        dy = (int) thirdPoint.getY(); // set the new y coordinate
         double distance = Math.sqrt(Math.pow(dx - x, 2) + Math.pow(dy - y, 2)); // calculate distance between endpoints
         double percentage = speed / distance; // calculate percentage of distance to travel each frame
         x += (int) Math.round((dx - x) * percentage); // move x coordinate based on percentage
         y += (int) Math.round((dy - y) * percentage); // move y coordinate based on percentage
         this.setLocation(x, y);
+
+        if(x < 0 || x > GameSize.SMALL.getWidth() || y < 0 || y > GameSize.SMALL.getHeight()) {
+            this.setVisible(false);
+        }
     }
+    public static Point calculateThirdPoint(Point p1, Point p2) {
+        double distance = p1.distance(p2); // calculate distance between the two points
+        double dx = (p2.getX() - p1.getX()) / distance; // calculate the x distance ratio
+        double dy = (p2.getY() - p1.getY()) / distance; // calculate the y distance ratio
+        double newX = p2.getX() + dx * GameSize.SMALL.getWidth() ; // calculate the new x coordinate that is 700 pixels away
+        double newY = p2.getY() + dy * GameSize.SMALL.getHeight(); // calculate the new y coordinate that is 700 pixels away
+        return new Point((int) newX, (int) newY); // create a new point and return it
+    }
+    
     
     public int getX() {
         return x;

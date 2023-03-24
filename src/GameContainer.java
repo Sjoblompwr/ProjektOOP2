@@ -20,6 +20,8 @@ public class GameContainer extends JPanel implements MouseListener{
     List<Asteroid> asteroids = new ArrayList<>();
     List<Integer> replaceAsteroid = new ArrayList<>();
     List<Missile> missiles = new ArrayList<>();
+    List<Missile> newMissiles = new ArrayList<>();
+    List<Missile> removeMissile = new ArrayList<>();
     Defender defender = new Defender(350, 350);
     
 
@@ -30,22 +32,57 @@ public class GameContainer extends JPanel implements MouseListener{
 
         addAsteroids();
         this.add(defender);
-        Timer timer = new Timer();
-        TimerTask move = new TimerTask() {
-            @Override
-            public void run() {
-                move();
-            }
-        };
+        // Timer timer = new Timer();
+        // TimerTask move = new TimerTask() {
+        //     @Override
+        //     public void run() {
+        //         move();
+        //     }
+        // };
 
-        TimerTask moveMissiles = new TimerTask() {
+        // TimerTask moveMissiles = new TimerTask() {
+        //     @Override
+        //     public void run() {
+        //         moveMissle();
+        //     }
+        // };
+        // timer.schedule(move, 0, 500);
+        // timer.schedule(moveMissiles, 0, 100);
+         // Create threads for move() and moveMissle()
+
+
+         
+         Thread moveThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                moveMissle();
+                while (true) {
+                    move();
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        };
-        timer.schedule(move, 0, 500);
-        timer.schedule(moveMissiles, 0, 500);
+        });
+
+        Thread moveMissilesThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    moveMissle();
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        // Start the threads
+        moveThread.start();
+        moveMissilesThread.start();
     }
 
     public void addAsteroids(){
@@ -59,6 +96,9 @@ public class GameContainer extends JPanel implements MouseListener{
         for(Asteroid a : asteroids){
             a.draw(g);
             defender.draw(g);
+        }
+        for(Missile m : missiles){
+            m.draw(g);
         }
     }
 
@@ -83,9 +123,17 @@ public class GameContainer extends JPanel implements MouseListener{
         for(Missile m : missiles){
             m.move();
             System.out.println("Missile moved");
+            if(!m.isVisible()){
+                removeMissile.add(m);
+            }
+            repaint();
         }
+        for(Missile m : removeMissile){
+            missiles.remove(m);
+        }
+        missiles.addAll(newMissiles);
+        newMissiles.clear();
     
-        repaint();
         
         System.out.println("Missile moved " + missiles.size());
     }
@@ -130,12 +178,14 @@ public class GameContainer extends JPanel implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("Pew pew");
-        missiles.add(defender.shot(defender.getX(),defender.getY(),e.getX(), e.getY()));
+        // System.out.println("Pew pew");
+        // newMissiles.add(defender.shot(defender.getX(),defender.getY(),e.getX(), e.getY()));
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mousePressed(MouseEvent e) {      
+          System.out.println("Pew pew");
+    newMissiles.add(defender.shot(defender.getX(),defender.getY(),e.getX(), e.getY()));
     }
 
     @Override
