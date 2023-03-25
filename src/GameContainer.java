@@ -11,10 +11,12 @@ import Domain.Missile;
 import Domain.Sprite;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-public class GameContainer extends JPanel implements MouseListener{
+public class GameContainer extends JPanel implements MouseListener, MouseMotionListener{
     
 
     List<Asteroid> asteroids = new ArrayList<>();
@@ -22,13 +24,14 @@ public class GameContainer extends JPanel implements MouseListener{
     List<Missile> missiles = new ArrayList<>();
     List<Missile> newMissiles = new ArrayList<>();
     List<Missile> removeMissile = new ArrayList<>();
+    private Point mousePosition = new Point(0, 0);
     Defender defender = new Defender(350, 350);
     
 
     public GameContainer(){      
         super();
         addMouseListener(this);
-
+        addMouseMotionListener(this);
 
         addAsteroids();
         this.add(defender);
@@ -57,6 +60,7 @@ public class GameContainer extends JPanel implements MouseListener{
             public void run() {
                 while (true) {
                     move();
+                    moveMissle();
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -66,23 +70,23 @@ public class GameContainer extends JPanel implements MouseListener{
             }
         });
 
-        Thread moveMissilesThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    moveMissle();
-                    try {
-                        Thread.sleep(10);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
+        // Thread moveMissilesThread = new Thread(new Runnable() {
+        //     @Override
+        //     public void run() {
+        //         while (true) {
+        //             moveMissle();
+        //             try {
+        //                 Thread.sleep(10);
+        //             } catch (InterruptedException e) {
+        //                 e.printStackTrace();
+        //             }
+        //         }
+        //     }
+        // });
 
         // Start the threads
         moveThread.start();
-        moveMissilesThread.start();
+        // moveMissilesThread.start();
     }
 
     public void addAsteroids(){
@@ -97,7 +101,7 @@ public class GameContainer extends JPanel implements MouseListener{
             a.draw(g);
 
         }
-        defender.draw(g);
+        defender.draw(g,(int) mousePosition.getX(), (int)mousePosition.getY());
         for(Missile m : missiles){
             m.draw(g);
         }
@@ -112,7 +116,7 @@ public class GameContainer extends JPanel implements MouseListener{
         }
         for(Integer i : replaceAsteroid){
             System.out.println("Replace asteroid");
-            this.remove(asteroids.get(i));
+            //this.remove(asteroids.get(i));
             // asteroids.remove(asteroids.get(i));
             // asteroids.add(i,generateAsteroid());
             asteroids.set(i, generateAsteroid());
@@ -160,7 +164,7 @@ public class GameContainer extends JPanel implements MouseListener{
         int xPos, yPos;
       
         rand = Math.random();
-        System.out.println(rand);
+      
         // Determine which side the asteroid should appear from based on the random number
         if (rand < 0.25) {
             // Left side of the game window
@@ -191,6 +195,7 @@ public class GameContainer extends JPanel implements MouseListener{
     public void mouseClicked(MouseEvent e) {
         // System.out.println("Pew pew");
         // newMissiles.add(defender.shot(defender.getX(),defender.getY(),e.getX(), e.getY()));
+        // this.mousePosition = e.getPoint();
     }
 
     @Override
@@ -209,6 +214,16 @@ public class GameContainer extends JPanel implements MouseListener{
 
     @Override
     public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        this.mousePosition = e.getPoint();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        this.mousePosition = e.getPoint();
     }
 
 

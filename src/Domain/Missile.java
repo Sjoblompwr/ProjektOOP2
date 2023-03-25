@@ -25,7 +25,7 @@ public class Missile extends JPanel{
         this.dy = dy;
         this.width = 4;
         this.height = 4;
-        this.speed = 2;
+        this.speed = 10;
         this.visible = true;
     }
 

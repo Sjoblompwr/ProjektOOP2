@@ -10,6 +10,7 @@ public class Defender extends JPanel{
 
     private int xPosition;
     private int yPosition;
+    private int size = 15;
 
     public Defender(int x, int y) {
         this.xPosition = x;
@@ -20,25 +21,33 @@ public class Defender extends JPanel{
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (g instanceof Graphics2D) {
-            draw((Graphics2D) g);
-        }
     }
 
-    public void draw(Graphics g) {
-        int[] xPoints = {xPosition, xPosition + 5, xPosition + 10}; // X coordinates of the triangle vertices
-        int[] yPoints = {yPosition, yPosition - 10, yPosition}; // Y coordinates of the triangle vertices
-        int numPoints = 3; // Number of vertices in the polygon
-        g.drawPolygon(xPoints, yPoints, numPoints);
-    }
+
+
+        public void draw(Graphics g, int targetX, int targetY) {
+            // Calculate the angle between the polygon and the target point
+            double angle = Math.atan2(targetY - yPosition, targetX - xPosition);
+            
+            // Rotate the graphics context by the calculated angle
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.rotate(angle + Math.PI/2, xPosition, yPosition);
+            // Draw the polygon
+            int[] xPoints = {xPosition, xPosition + size, xPosition, xPosition - size};
+            int[] yPoints = {yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size};
+            g.drawPolygon(xPoints, yPoints, xPoints.length);
+            
+            // Reset the graphics context
+            g2d.rotate(-angle - Math.PI/2, xPosition, yPosition);
+        }
+        
+
     
 
     public Missile shot(int x, int y, int dx, int dy) {
-        System.out.println("Defender: " + this.xPosition + " " + this.yPosition);
         //x and y position of the defender to reach the point where the missile is shot
         Missile missile = new Missile(xPosition, yPosition, dx, dy);
         return missile;
-       //return  new Missile(x, y,dx,dy);
     }
 
     public int getXPosition() {
