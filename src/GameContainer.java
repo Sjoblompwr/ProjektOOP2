@@ -183,9 +183,10 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
             xPos = (int) (Math.random() * gameWidth);
             yPos = gameHeight;
         }
-
+        if(rand < 0.4)
+            rand = 0.45;
         // Create the asteroid with the generated position
-       return new Asteroid(xPos, yPos, 5);
+       return new Asteroid(xPos, yPos, (int) (5 * rand) + 1);
 
     }
 

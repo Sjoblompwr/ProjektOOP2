@@ -44,7 +44,7 @@ public class Asteroid extends JPanel {
     
 
     public void draw(Graphics g2) {
-        int[] xpoints = {0, 3*size, 5*size, 5*size, 2*size, 0, -2*size, -4*size, -2*size};
+        int[] xpoints = {0, 3*size, 5*size, 5*size, 2*size, 0, -2*size, -4*size, -4*size};
         int[] ypoints = {-5*size, -4*size, -2*size, 0, 4*size, 5*size, 4*size, 0, -2*size};
         for (int i = 0; i < xpoints.length; i++) {
             xpoints[i] += xPosition;
