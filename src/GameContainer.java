@@ -1,3 +1,4 @@
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
@@ -5,16 +6,10 @@ import java.util.TimerTask;
 import javax.swing.JPanel;
 import java.util.Timer;
 
-import Domain.Asteroid;
-import Domain.Defender;
-import Domain.Missile;
-import Domain.Sprite;
+import Domain.*;
 
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
 public class GameContainer extends JPanel implements MouseListener, MouseMotionListener{
     
@@ -26,7 +21,8 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
     List<Missile> removeMissile = new ArrayList<>();
     private Point mousePosition = new Point(0, 0);
     Defender defender = new Defender(350, 350);
-    
+    private Missile missile;
+    private SpaceShip spaceShip;
 
     public GameContainer(){      
         super();
@@ -105,6 +101,8 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
         for(Missile m : missiles){
             m.draw(g);
         }
+
+
     }
 
     private void move() {
@@ -115,7 +113,7 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
             }
         }
         for(Integer i : replaceAsteroid){
-            System.out.println("Replace asteroid");
+          //  System.out.println("Replace asteroid");
             //this.remove(asteroids.get(i));
             // asteroids.remove(asteroids.get(i));
             // asteroids.add(i,generateAsteroid());
@@ -225,7 +223,6 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
     public void mouseMoved(MouseEvent e) {
         this.mousePosition = e.getPoint();
     }
-
 
 
 
