@@ -1,39 +1,43 @@
 package Domain;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
 
 import javax.swing.*;
 
-public class Defender extends JPanel implements KeyListener , ActionListener {
+public class Defender extends JPanel implements ActionListener,KeyListener {
     private int xPosition;
     private int yPosition;
     private int size = 15;
-    private int dx = 0; // Change in x position per update
-    private int dy = 0; // Change in y position per update
+    private Polygon character;
+    private Point2D movement;
+    int aceleration =0;
+
     private Timer timer;
 
     public Defender(int x, int y) {
         this.xPosition = x;
         this.yPosition = y;
-
         // Initialize the timer to update the position every 20 milliseconds
-        timer = new Timer(20, this);
+
+        timer = new Timer(2, this);
         timer.start();
 
         // Add the KeyListener to the JPanel
         setFocusable(true);
         addKeyListener(this);
+
     }
 
     @Override
     protected void paintComponent(Graphics g) {
+
         super.paintComponent(g);
+     //   draw((Graphics2D) g,xPosition,yPosition);
     }
 
 
@@ -60,11 +64,11 @@ public class Defender extends JPanel implements KeyListener , ActionListener {
         return missile;
     }
 
-    public double getXPosition() {
+    public int getXPosition() {
         return this.xPosition;
     }
 
-    public double getYPosition() {
+    public int getYPosition() {
         return this.yPosition;
     }
 
@@ -75,29 +79,35 @@ public class Defender extends JPanel implements KeyListener , ActionListener {
     public void setYPosition(int y) {
         this.yPosition = y;
     }
-
     @Override
     public void keyTyped(KeyEvent e) {
 
     }
-
+    private int acelerationX = 0; // Change in x position per update
+    private int acelerationY = 0; // Change in y position per update
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
+
         // Set the change in position based on the arrow key pressed
         switch(keyCode) {
             case KeyEvent.VK_LEFT:
-                dx = -1;
+                //aceleration = aceleration-1;
+                acelerationX = -1+acelerationX;
                 break;
             case KeyEvent.VK_RIGHT:
-                dx = 1;
+                acelerationX = 1+acelerationX;
+              //  aceleration = aceleration+1;
                 break;
             case KeyEvent.VK_UP:
-                dy = -1;
+                acelerationY = -1+acelerationY;
+                //aceleration = aceleration-1;
                 break;
             case KeyEvent.VK_DOWN:
-                dy = 1;
+                acelerationY = 1+acelerationY;
+                //aceleration = aceleration+1;
+
                 break;
             default:
                 break;
@@ -106,31 +116,28 @@ public class Defender extends JPanel implements KeyListener , ActionListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
         int keyCode = e.getKeyCode();
 
         // Reset the change in position when the arrow key is released
         switch(keyCode) {
             case KeyEvent.VK_LEFT:
             case KeyEvent.VK_RIGHT:
-                dx = 0;
+                acelerationX = 0;
                 break;
             case KeyEvent.VK_UP:
             case KeyEvent.VK_DOWN:
-                dy = 0;
+                acelerationY = 0;
                 break;
             default:
                 break;
         }
-
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
         // Update the position of the defender
-        xPosition += dx;
-        yPosition += dy;
+        xPosition += acelerationX;
+        yPosition += acelerationY;
 
         // Repaint the JPanel to show the updated position
         repaint();
