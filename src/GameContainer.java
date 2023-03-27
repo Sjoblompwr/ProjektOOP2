@@ -22,7 +22,7 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
     private Point mousePosition = new Point(0, 0);
     Defender defender = new Defender(350, 350);
     private Missile missile;
-    private SpaceShip spaceShip;
+    private List<SpaceShip> spaceShip;
 
     public GameContainer(){      
         super();
@@ -101,6 +101,9 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
         for(Missile m : missiles){
             m.draw(g);
         }
+        for (SpaceShip s : spaceShip){
+            s.draw(g);
+        }
 
 
     }
@@ -149,7 +152,32 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
         
        // System.out.println("Missile moved " + missiles.size());
     }
+        private SpaceShip generateSpaceShip(){
+            int gameWidth = 650;
+            int gameHeight = 650;
+            int xPos , yPos ;
+            double rand;
+            rand = Math.random();
+            if (rand < 0.25) {
+                // Left side of the game window
+                xPos = 0;
+                yPos = (int) (Math.random() * gameHeight);
+            } else if (rand < 0.5) {
+                // Top side of the game window
+                xPos = (int) (Math.random() * gameWidth);
+                yPos = 0;
+            } else if (rand < 0.75) {
+                // Right side of the game window
+                xPos = gameWidth;
+                yPos = (int) (Math.random() * gameHeight);
+            } else {
+                // Bottom side of the game window
+                xPos = (int) (Math.random() * gameWidth);
+                yPos = gameHeight;
+            }
 
+            return new SpaceShip(xPos,yPos,2);
+        }
 
 
     private Asteroid generateAsteroid() {

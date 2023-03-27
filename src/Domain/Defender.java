@@ -13,9 +13,8 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
     private int xPosition;
     private int yPosition;
     private int size = 15;
-    private Polygon character;
-    private Point2D movement;
     int aceleration =0;
+    private int angle = 0;
 
     private Timer timer;
 
@@ -83,8 +82,8 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
     public void keyTyped(KeyEvent e) {
 
     }
-    private int acelerationX = 0; // Change in x position per update
-    private int acelerationY = 0; // Change in y position per update
+    private double acelerationX = 0; // Change in x position per update
+    private double acelerationY = 0; // Change in y position per update
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
@@ -94,18 +93,20 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
         switch(keyCode) {
             case KeyEvent.VK_LEFT:
                 //aceleration = aceleration-1;
-                acelerationX = -1+acelerationX;
+                acelerationX = -0.5+acelerationX;
+                angle -= 5;
                 break;
             case KeyEvent.VK_RIGHT:
-                acelerationX = 1+acelerationX;
+                acelerationX = 0.5+acelerationX;
               //  aceleration = aceleration+1;
+                angle += 5;
                 break;
             case KeyEvent.VK_UP:
-                acelerationY = -1+acelerationY;
+                acelerationY = -0.5+acelerationY;
                 //aceleration = aceleration-1;
                 break;
             case KeyEvent.VK_DOWN:
-                acelerationY = 1+acelerationY;
+                acelerationY = 0.5+acelerationY;
                 //aceleration = aceleration+1;
 
                 break;

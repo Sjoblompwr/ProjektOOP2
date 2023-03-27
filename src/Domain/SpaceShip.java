@@ -1,8 +1,10 @@
 package Domain;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
-public class SpaceShip {
+public class SpaceShip extends JPanel {
 
     private int xPosition;
     private int yPosition;
@@ -11,12 +13,10 @@ public class SpaceShip {
     private int height;
     private int health;
 
-    public SpaceShip(int xPosition, int yPosition, int speed, int width, int height, int health) {
+    public SpaceShip(int xPosition, int yPosition, int speed) {
         this.xPosition = xPosition;
         this.yPosition = yPosition;
         this.speed = speed;
-        this.width = width;
-        this.height = height;
         this.health = health;
     }
 
@@ -75,6 +75,12 @@ public class SpaceShip {
         // implementera hur kollision med andra objekt ska hanteras
     }
     public void draw(Graphics g) {
-        // implementera hur fienden ska ritas ut på skärmen
+        Graphics2D g2d = (Graphics2D) g;
+        Rectangle2D.Double shape = new Rectangle2D.Double(xPosition, yPosition, width, height);
+        g2d.fill(shape);
+    }
+    @Override
+    protected void paintComponent(Graphics g){
+        super.paintComponent(g);
     }
 }
