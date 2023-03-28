@@ -1,20 +1,19 @@
+package Game;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Domain.Asteroid;
 import Domain.Defender;
 import Domain.Missile;
+import MouseHandler.Pointable;
 
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-
-public class GameContainer extends JPanel implements MouseListener, MouseMotionListener{
+public class GameContainer extends JPanel implements Pointable{
     
 
     List<Asteroid> asteroids = new ArrayList<>();
@@ -25,17 +24,16 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
     List<Asteroid> newAsteroidsFromExplodeAsteroids = new ArrayList<>();
     private Point mousePosition = new Point(0, 0);
     Defender defender = new Defender(350, 350);
-    private int temp = 0;
+    private int score = 0;
+    JLabel scoreLabel;
 
     Polygon defenderSpaceShip;
     Thread moveThread;
 
     public GameContainer(){      
         super();
-        addMouseListener(this);
-        addMouseMotionListener(this);
-        addAsteroids();
         this.add(defender);  
+        addScoreScreen();
         defenderSpaceShip = defender.getSpaceShipPolygon();
 
 
@@ -43,7 +41,7 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
             @Override
             public void run() {
                 while (true) {
-                    move();
+                    moveAsteroids();
                     moveMissle();
                     try {
                         Thread.sleep(50);
@@ -58,6 +56,11 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
         moveThread.start();
     }
 
+    private void addScoreScreen(){
+        this.scoreLabel = new JLabel("Score: " + score);
+        this.add(scoreLabel);
+    }
+
     public void addAsteroids(){
         for(int i = 0; i < 20; i++){
             asteroids.add(generateAsteroid());
@@ -68,7 +71,6 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
         super.paintComponent(g);
         defender.draw(g,(int) mousePosition.getX(), (int)mousePosition.getY());
         defenderSpaceShip = defender.getSpaceShipPolygon();
-        g.drawPolygon(defenderSpaceShip);
         for(Asteroid a : asteroids){
             a.draw(g);
 
@@ -79,7 +81,7 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
 
     }
 
-    private void move() {
+    private void moveAsteroids() {
         boolean reset = false;
         for(Asteroid a : asteroids){
             a.move();
@@ -87,7 +89,6 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
             for (int i = 0; i < asteroidPolygon.npoints; i++) {
                 if (defenderSpaceShip.contains(asteroidPolygon.xpoints[i], asteroidPolygon.ypoints[i])) {
                     // collision detected
-                    System.out.println("Spaceship has been hit by asteroid! " + temp++);
                     reset = true;
                     break;
                 }
@@ -114,6 +115,8 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
             for(Asteroid a : asteroids){
                 if(a.isPointInsidePolygon(m.getX(), m.getY())){
                     System.out.println("Hit");
+                    score = score + 10;
+                    scoreLabel.setText("Score: " + score);
                     if(a.getSizeOfAsteroid() > 3){
                         newAsteroidsFromExplodeAsteroids.add(
                             new Asteroid(a.getXPosition(), a.getYPosition(),3, a.getDesign()));
@@ -142,9 +145,7 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
         repaint();
     }
 
-
-
-    private Asteroid generateAsteroid() {
+    public Asteroid generateAsteroid() {
         // The width and height of the game window where the asteroids can appear
         int gameWidth = 650;
         int gameHeight = 650;
@@ -186,42 +187,26 @@ public class GameContainer extends JPanel implements MouseListener, MouseMotionL
     private void resetGame(){
         asteroids.clear();
         addAsteroids();
+        score = 0;
+        scoreLabel.setText("Score: " + score);
         repaint();
     }
 
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
 
     @Override
-    public void mousePressed(MouseEvent e) {    
-        newMissiles.add(defender.shot(defender.getX(),defender.getY(),e.getX(), e.getY()));
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        this.mousePosition = e.getPoint();
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        this.mousePosition = e.getPoint();
+    public void pointerDown(Point point) {
+        newMissiles.add(defender.shot(defender.getX(),defender.getY(),(int)point.getX(), (int)point.getY()));
     }
 
 
 
+    @Override
+    public void pointerMoved(Point point, boolean pointerDown) {
+        this.mousePosition = point;
+    }
 
+    public List<Asteroid> getAsteroids() {
+        return asteroids;
+    }
 }
