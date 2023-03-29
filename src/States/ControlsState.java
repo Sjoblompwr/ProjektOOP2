@@ -2,7 +2,7 @@ package States;
 
 import java.awt.Point;
 
-public class PlayState extends State{
+public class ControlsState extends State {
 
     @Override
     public void pointerDown(Point point) {
@@ -15,7 +15,5 @@ public class PlayState extends State{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'pointerMoved'");
     }
-
-
     
 }

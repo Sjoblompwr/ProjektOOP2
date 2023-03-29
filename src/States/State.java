@@ -1,5 +1,7 @@
 package States;
 
-public abstract class State implements StateInterface {
+import MouseHandler.Pointable;
+
+public abstract class State implements Pointable {
     
 }

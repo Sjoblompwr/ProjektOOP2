@@ -1,11 +1,26 @@
 package States;
 
+import java.awt.Point;
+
 public class ManuState extends State{
 
-    @Override
-    public void mousePressed(int x, int y) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+
+    public ManuState() {
+        // TODO Auto-generated constructor stub
     }
+
+    @Override
+    public void pointerDown(Point point) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'pointerDown'");
+    }
+
+    @Override
+    public void pointerMoved(Point point, boolean pointerDown) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'pointerMoved'");
+    }
+
+
     
 }
