@@ -110,6 +110,16 @@ public class SpaceShip extends JPanel {
             missile.draw(g);
         }
     }
+    public Polygon getPolygon() {
+        int[] xpoints =  {0, 2*size, 2*size, 2*size};
+        int[] ypoints = {-2*size, -2*size, -2*size, 0};
+
+        for (int i = 0; i < xpoints.length; i++) {
+            xpoints[i] += xPosition;
+            ypoints[i] += yPosition;
+        }
+        return new Polygon(xpoints, ypoints, xpoints.length);
+    }
     public boolean isPointInsidePolygon(int x, int y) {
         int[] xpoints =  {0, 2*size, 2*size, 2*size};
         int[] ypoints = {-2*size, -2*size, -2*size, 0};

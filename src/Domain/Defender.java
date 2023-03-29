@@ -34,7 +34,7 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
         addKeyListener(this);
     }
 
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -103,6 +103,22 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
         }
         // create and return the rotated polygon
         return new Polygon(rotatedXPoints, rotatedYPoints, xPoints.length);
+    }
+    public boolean isPointInsidePolygon(int x, int y) {
+        int[] xpoints =  {xPosition, xPosition + size, xPosition, xPosition - size};
+        int[] ypoints = {yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size};
+
+
+        int intersections = 0;
+        int n = xpoints.length;
+        for (int i = 0; i < n; i++) {
+            int j = (i + 1) % n;
+            if ((ypoints[i] + yPosition > y) != (ypoints[j] + yPosition > y) &&
+                    x < (xpoints[j] + xPosition - xpoints[i] - xPosition) * (y - ypoints[i] - yPosition) / (ypoints[j] - ypoints[i]) + xpoints[i] + xPosition) {
+                intersections++;
+            }
+        }
+        return (intersections % 2 == 1);
     }
 
 

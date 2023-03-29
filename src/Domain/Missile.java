@@ -1,9 +1,6 @@
 package Domain;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 
 import javax.swing.JPanel;
 
@@ -28,7 +25,14 @@ public class Missile extends JPanel{
         this.speed = 10;
         this.visible = true;
     }
-
+    public Rectangle getBounds(){
+       return new Rectangle(x,y,dx,dy);
+    }
+    public Polygon getPolygon() {
+        int[] xPoints = { x, x + width, x + width, x };
+        int[] yPoints = { y, y, y + height, y + height };
+        return new Polygon(xPoints, yPoints, 4);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {

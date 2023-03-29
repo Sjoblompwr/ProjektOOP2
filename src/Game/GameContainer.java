@@ -33,6 +33,7 @@ public class GameContainer extends JPanel implements Pointable{
     JLabel scoreLabel;
 
     Polygon defenderSpaceShip;
+    Polygon missilePorj;
     Thread moveThread;
     List<SpaceShip> spaceShip = new ArrayList<>();
 
@@ -106,10 +107,18 @@ public class GameContainer extends JPanel implements Pointable{
 
     }
     private void moveShip() {
-            Timer timer = new Timer();
-            boolean replace = false;
+        boolean reset = false;
             for (SpaceShip b : spaceShip) {
                 b.move();
+                Polygon player = b.getPolygon();
+
+                for (int i =0; i<player.npoints;i++){
+                    if(defenderSpaceShip.contains(player.xpoints[i],player.ypoints[i])){
+                        // collision detected
+                        reset = true;
+                        break;
+                    }
+                }
                 if (b.getX() < -5 || b.getX() > 700 || b.getY() < -5 || b.getY() > 700) {
                     startTime = System.currentTimeMillis();
                     replaceSpaceShip.add(spaceShip.indexOf(b));
@@ -126,9 +135,14 @@ public class GameContainer extends JPanel implements Pointable{
                 if (!replaceSpaceShip.isEmpty()) {
                     spaceShip.add(generateSpaceShip());
                     replaceSpaceShip.clear();
+
                 }
 
+
             }
+        if(reset){
+            resetGame();
+        }
         }
     private void moveAsteroids() {
         boolean reset = false;
@@ -160,21 +174,6 @@ public class GameContainer extends JPanel implements Pointable{
         if(reset){
             resetGame();
         }
-    }
-    private void startGeneratingSpaceships() {
-        Timer timer = new Timer();
-
-        // Skapa en TimerTask som genererar rymdskepp och lägger till dem i spelet
-        TimerTask generateSpaceships = new TimerTask() {
-            @Override
-            public void run() {
-                SpaceShip newSpaceShip = generateSpaceShip();
-                spaceShip.add(newSpaceShip);
-            }
-        };
-
-        // Schedule TimerTask-objektet att köras varje sekund
-        timer.scheduleAtFixedRate(generateSpaceships, 0, 1000);
     }
 
     private void moveMissileSpa(){
@@ -317,7 +316,7 @@ public class GameContainer extends JPanel implements Pointable{
 
         // Create the SpaceShip with the generated position
         SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500);
-
+        boolean reset = false;
         // Make the SpaceShip shoot a Missile
         newSpaceShip.startShooting(defender);
 
