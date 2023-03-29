@@ -88,25 +88,26 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
-
+        int ac = 1;
         // Set the change in position based on the arrow key pressed
         switch(keyCode) {
+
             case KeyEvent.VK_LEFT:
                 //aceleration = aceleration-1;
-                acelerationX = -0.5+acelerationX;
-                angle -= 5;
+                acelerationX = -ac+acelerationX;
+               // angle -= 5;
                 break;
             case KeyEvent.VK_RIGHT:
-                acelerationX = 0.5+acelerationX;
+                acelerationX = ac+acelerationX;
               //  aceleration = aceleration+1;
-                angle += 5;
+             //   angle += 5;
                 break;
             case KeyEvent.VK_UP:
-                acelerationY = -0.5+acelerationY;
+                acelerationY = -ac+acelerationY;
                 //aceleration = aceleration-1;
                 break;
             case KeyEvent.VK_DOWN:
-                acelerationY = 0.5+acelerationY;
+                acelerationY = ac+acelerationY;
                 //aceleration = aceleration+1;
 
                 break;

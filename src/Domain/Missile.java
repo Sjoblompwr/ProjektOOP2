@@ -29,6 +29,7 @@ public class Missile extends JPanel{
         this.visible = true;
     }
 
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
