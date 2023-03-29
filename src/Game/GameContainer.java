@@ -56,6 +56,7 @@ public class GameContainer extends JPanel implements Pointable{
 
                     moveAsteroids();
                     moveMissle();
+                    moveMissileSpa();
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {

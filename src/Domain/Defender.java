@@ -20,7 +20,6 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
     private int[] xPoints;
     private int[] yPoints;
     private Timer timer;
-    int aceleration =0;
 
     public Defender(int x, int y) {
         this.xPosition = x;
