@@ -1,3 +1,5 @@
+package Game;
+
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,21 +43,15 @@ public class GameContainer extends JPanel implements Pointable{
         super();
         this.add(defender);
         addScoreScreen();
+        addSpaceShip();
         defenderSpaceShip = defender.getSpaceShipPolygon();
 
 
         moveThread = new Thread(new Runnable() {
-        addMouseListener(this);
-        addMouseMotionListener(this);
-        addSpaceShip();
-        addAsteroids();
-        this.add(defender);
 
-         Thread moveThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true) {
-                    move();
                    moveShip();
 
                     moveAsteroids();
@@ -71,8 +67,8 @@ public class GameContainer extends JPanel implements Pointable{
 
         // Start the threads
         moveThread.start();
-    }
 
+    }
     private void addScoreScreen(){
         this.scoreLabel = new JLabel("Score: " + score);
         this.add(scoreLabel);
@@ -108,31 +104,31 @@ public class GameContainer extends JPanel implements Pointable{
 
 
     }
-    private void moveShip(){
-        Timer timer = new Timer();
-        boolean replace = false;
-        for (SpaceShip b : spaceShip){
-            b.move();
-            if (b.getX() < -5 || b.getX() > 700 || b.getY() < -5 || b.getY() > 700) {
-                startTime = System.currentTimeMillis();
-                replaceSpaceShip.add(spaceShip.indexOf(b));
+    private void moveShip() {
+            Timer timer = new Timer();
+            boolean replace = false;
+            for (SpaceShip b : spaceShip) {
+                b.move();
+                if (b.getX() < -5 || b.getX() > 700 || b.getY() < -5 || b.getY() > 700) {
+                    startTime = System.currentTimeMillis();
+                    replaceSpaceShip.add(spaceShip.indexOf(b));
+                }
+            }
+            if (!spaceShip.isEmpty()) {
+                for (Integer i : replaceSpaceShip) {
+                    spaceShip.remove(spaceShip.get(replaceSpaceShip.get(i)));
+                }
+            }
+
+
+            if (System.currentTimeMillis() - startTime > 6000) {
+                if (!replaceSpaceShip.isEmpty()) {
+                    spaceShip.add(generateSpaceShip());
+                    replaceSpaceShip.clear();
+                }
+
             }
         }
-        if(!spaceShip.isEmpty()) {
-            for (Integer i : replaceSpaceShip) {
-                spaceShip.remove(spaceShip.get(replaceSpaceShip.get(i)));
-            }
-        }
-
-
-       if(System.currentTimeMillis() - startTime > 6000){
-           if(!replaceSpaceShip.isEmpty()) {
-               spaceShip.add(generateSpaceShip());
-               replaceSpaceShip.clear();
-           }
-
-       }
-
     private void moveAsteroids() {
         boolean reset = false;
         for(Asteroid a : asteroids){

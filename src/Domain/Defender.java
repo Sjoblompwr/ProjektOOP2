@@ -28,6 +28,8 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
         this.angle = 0;
         this.xPoints = new int[] {xPosition, xPosition + size, xPosition, xPosition - size};
         this.yPoints = new int[] {yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size};
+
+        timer = new Timer(2, this);
         timer.start();
         setFocusable(true);
         addKeyListener(this);
