@@ -169,6 +169,11 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
         xPosition += acelerationX;
         yPosition += acelerationY;
 
+        // Update the points of the polygon
+        xPoints = new int[] {xPosition, xPosition + size, xPosition, xPosition - size};
+        yPoints = new int[] {yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size};
+
+
         // Repaint the JPanel to show the updated position
         repaint();
     }
