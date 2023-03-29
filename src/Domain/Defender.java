@@ -43,6 +43,19 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
 
 
     public void draw(Graphics g, int targetX, int targetY) {
+        if(xPosition < 0) {
+            xPosition = 750;
+        }
+        if(xPosition > 750) {
+            xPosition = 0;
+        }
+        if(yPosition < 0) {
+            yPosition = 750;
+        }
+        if(yPosition > 750) {
+            yPosition = 0;
+        }
+
         // Calculate the angle between the polygon and the target point
         double angle = Math.atan2(targetY - yPosition, targetX - xPosition);
 
