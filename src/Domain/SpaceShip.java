@@ -1,45 +1,39 @@
 package Domain;
-
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.TimerTask;
 import java.util.Timer;
+
 public class SpaceShip extends JPanel {
-    private int xPosition, yPosition,  health, size;
+    private int xPosition, yPosition, health, size;
     double speed;
     private Color color;
     private Random rand;
-    private Timer timer;
     private int shotInterval;
+    private Defender defender;
     private Missile missile;
-    public SpaceShip( int x, int y,int shotInterval) {
+    private Long spawnTime;
+
+    public SpaceShip(int x, int y, int shotInterval,Defender defender) {
         this.xPosition = x;
         this.yPosition = y;
-        this.speed = 1.2;
+        this.speed = 1.8;
         this.health = 3;
-        this.size = 30;
+        this.size = 10;
         this.color = Color.RED;
+        this.defender = defender;
+        this.spawnTime = System.currentTimeMillis();
         this.rand = new Random();
         this.shotInterval = shotInterval;
         setFocusable(true);
     }
 
-    public void startShooting(Defender player) {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                shot(player);
-            }
-        }, 0, shotInterval);
-    }
-    public void stopShooting() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
+
+
+
 
     public void move() {
         // Generate random angle
@@ -66,17 +60,6 @@ public class SpaceShip extends JPanel {
     }
 
     public Missile shot(Defender player) {
-
-       /* int dx = player.getX() - this.xPosition;
-        int dy = player.getY() - this.yPosition;
-        double direction = Math.atan2(dy, dx);
-        double deviation = Math.toRadians(rand.nextInt(20) - 10);
-        direction += deviation;
-        int speed = 5;
-        int missileX = (int) (this.xPosition + Math.cos(direction) * this.size / 2);
-        int missileY = (int) (this.yPosition + Math.sin(direction) * this.size / 2);
-        Missile missile = new Missile(missileX, missileY, (int) (speed * Math.cos(direction)), (int) (speed * Math.sin(direction)));
-        // TODO: Add missile to game world*/
         int dx = player.getX() - this.xPosition;
         int dy = player.getY() - this.yPosition;
         double direction = Math.atan2(dy, dx);
@@ -88,19 +71,19 @@ public class SpaceShip extends JPanel {
         missile = new Missile(missileX, missileY, (int) (speed * Math.cos(direction)), (int) (speed * Math.sin(direction)));
         return missile;
     }
+    private long lastShotTime = 0;
+    public Missile shoot(Point point) {
+        if(System.currentTimeMillis() - spawnTime > 1000)
+            return new Missile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
+        else
+            return null;
+    }
 
     public void draw(Graphics g) {
         g.setColor(this.color);
-       /* // Skapa en polygon som representerar skeppet
-        Polygon p = new Polygon();
-        p.addPoint(this.xPosition  + this.size/2, this.yPosition );
-        p.addPoint(this.xPosition , this.yPosition + this.size);
-        p.addPoint(this.xPosition  + this.size/2, this.yPosition  + this.size/2);
-        p.addPoint(this.xPosition + this.size, this.yPosition  + this.size);
-        g.drawPolygon(p);*/
-
-        int[] xpoints = {0, 2*size, 2*size, 2*size};
-        int[] ypoints = {-2*size, -2*size, -2*size, 0};
+        int[][] points = createPolygon();
+        int[] xpoints = points[0];
+        int[] ypoints = points[1];
         for (int i = 0; i < xpoints.length; i++) {
             xpoints[i] += xPosition;
             ypoints[i] += yPosition;
@@ -110,21 +93,38 @@ public class SpaceShip extends JPanel {
             missile.draw(g);
         }
     }
-    public Polygon getPolygon() {
-        int[] xpoints =  {0, 2*size, 2*size, 2*size};
-        int[] ypoints = {-2*size, -2*size, -2*size, 0};
+    private int[][] createPolygon() {
+        int[][] points = new int[2][4];
+        int halfSize = size / 2;
 
+        points[0][0] = 0;
+        points[0][1] = size;
+        points[0][2] = size * 2;
+        points[0][3] = size;
+
+        points[1][0] = halfSize;
+        points[1][1] = 0;
+        points[1][2] = halfSize;
+        points[1][3] = size * 2;
+
+        return points;
+    }
+
+    public Polygon getPolygon() {
+        int[][] points = createPolygon();
+        int[] xpoints = points[0];
+        int[] ypoints = points[1];
         for (int i = 0; i < xpoints.length; i++) {
             xpoints[i] += xPosition;
             ypoints[i] += yPosition;
         }
         return new Polygon(xpoints, ypoints, xpoints.length);
     }
+
     public boolean isPointInsidePolygon(int x, int y) {
-        int[] xpoints =  {0, 2*size, 2*size, 2*size};
-        int[] ypoints = {-2*size, -2*size, -2*size, 0};
-
-
+        int[][] points = createPolygon();
+        int[] xpoints = points[0];
+        int[] ypoints = points[1];
         int intersections = 0;
         int n = xpoints.length;
         for (int i = 0; i < n; i++) {
@@ -136,18 +136,12 @@ public class SpaceShip extends JPanel {
         }
         return (intersections % 2 == 1);
     }
+
     @Override
     protected void paintComponent(Graphics g) {
 
         super.paintComponent(g);
         //   draw((Graphics2D) g,xPosition,yPosition);
-    }
-
-    public void takeDamage(int amount) {
-        this.health -= amount;
-        if (this.health <= 0) {
-            // TODO: Remove enemy ship from game world
-        }
     }
 
     @Override
