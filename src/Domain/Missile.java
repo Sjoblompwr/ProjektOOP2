@@ -1,10 +1,12 @@
 package Domain;
 
+import Factory.ComonInterFace;
+
 import java.awt.*;
 
 import javax.swing.JPanel;
 
-public class Missile extends JPanel{
+public class Missile extends JPanel implements ComonInterFace {
     private int x;
     private int y;
     private int dx;

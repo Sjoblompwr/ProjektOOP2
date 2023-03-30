@@ -1,12 +1,14 @@
 package Domain;
+
+import Factory.ComonInterFace;
+
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.util.Random;
 
 import javax.swing.JPanel;
 
-public class Asteroid extends JPanel {
+public class Asteroid extends JPanel  implements ComonInterFace {
 
     private int xPosition;
     private int yPosition;

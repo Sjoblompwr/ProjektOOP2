@@ -1,10 +1,12 @@
 package Domain;
 
+import Factory.ComonInterFace;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-public class SpaceShip extends JPanel {
+public class SpaceShip extends JPanel implements ComonInterFace {
     private int xPosition, yPosition, health, size;
     double speed;
     private Color color;

@@ -1,5 +1,7 @@
 package Domain;
 
+import Factory.DefenderInterface;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -10,7 +12,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.*;
 
-public class Defender extends JPanel {
+public class Defender extends JPanel implements DefenderInterface {
     private int xPosition;
     private int yPosition;
     private double angle;
