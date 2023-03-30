@@ -1,6 +1,7 @@
 package Domain;
 
 import Factory.ComonInterFace;
+import Factory.Factory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,7 @@ public class SpaceShip extends JPanel implements ComonInterFace {
     private Defender defender;
     private Missile missile;
     private Long spawnTime;
+    Factory factory = new Factory();
 
     public SpaceShip(int x, int y, int shotInterval, Defender defender) {
         this.xPosition = x;
@@ -73,7 +75,8 @@ public class SpaceShip extends JPanel implements ComonInterFace {
     private long lastShotTime = 0;
     public Missile shoot(Point point) {
         if(System.currentTimeMillis() - spawnTime > 1000)
-            return new Missile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
+          return   missile = factory.createMissile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
+           // return new Missile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
         else
             return null;
     }

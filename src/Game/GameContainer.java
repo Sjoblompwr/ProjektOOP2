@@ -30,7 +30,7 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     private List<Missile> enamyMissiles = new ArrayList<>();
     private Point mousePosition = new Point(0, 0);
 
-    Defender defender = new Defender(350, 350);
+    Defender defender ;
     private int score = 0;
     JLabel scoreLabel;
     Factory factory = new Factory();
@@ -45,7 +45,9 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
 
     private int index = 0;
     public GameContainer() {
+
         super();
+      defender = factory.createDefender(350,350);
         this.add(defender);
         addScoreScreen();
         addSpaceShip();

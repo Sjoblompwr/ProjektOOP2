@@ -1,6 +1,7 @@
 package Domain;
 
 import Factory.DefenderInterface;
+import Factory.Factory;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,6 +20,7 @@ public class Defender extends JPanel implements DefenderInterface {
     private int size = 15;
     private int[] xPoints;
     private int[] yPoints;
+    Factory factory = new Factory();
 
     public Defender(int x, int y) {
         this.xPosition = x;
@@ -71,7 +73,8 @@ public class Defender extends JPanel implements DefenderInterface {
 
     public Missile shot(int x, int y, int dx, int dy) {
         // x and y position of the defender to reach the point where the missile is shot
-        Missile missile = new Missile(xPosition, yPosition, dx, dy);
+
+        Missile missile = factory.createMissile(xPosition, yPosition, dx, dy);
         return missile;
     }
 
