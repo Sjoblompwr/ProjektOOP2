@@ -12,7 +12,6 @@ public class SpaceShip extends JPanel {
     double speed;
     private Color color;
     private Random rand;
-    private Timer timer;
     private int shotInterval;
     private Defender defender;
     private Missile missile;
@@ -28,7 +27,6 @@ public class SpaceShip extends JPanel {
 
         this.rand = new Random();
         this.shotInterval = shotInterval;
-        //startShooting();
         setFocusable(true);
     }
 
@@ -66,17 +64,6 @@ public class SpaceShip extends JPanel {
     }
 
     public Missile shot(Defender player) {
-
-       /* int dx = player.getX() - this.xPosition;
-        int dy = player.getY() - this.yPosition;
-        double direction = Math.atan2(dy, dx);
-        double deviation = Math.toRadians(rand.nextInt(20) - 10);
-        direction += deviation;
-        int speed = 5;
-        int missileX = (int) (this.xPosition + Math.cos(direction) * this.size / 2);
-        int missileY = (int) (this.yPosition + Math.sin(direction) * this.size / 2);
-        Missile missile = new Missile(missileX, missileY, (int) (speed * Math.cos(direction)), (int) (speed * Math.sin(direction)));
-    */
         int dx = player.getX() - this.xPosition;
         int dy = player.getY() - this.yPosition;
         double direction = Math.atan2(dy, dx);
@@ -96,14 +83,6 @@ public class SpaceShip extends JPanel {
 
     public void draw(Graphics g) {
         g.setColor(this.color);
-       /* // Skapa en polygon som representerar skeppet
-        Polygon p = new Polygon();
-        p.addPoint(this.xPosition  + this.size/2, this.yPosition );
-        p.addPoint(this.xPosition , this.yPosition + this.size);
-        p.addPoint(this.xPosition  + this.size/2, this.yPosition  + this.size/2);
-        p.addPoint(this.xPosition + this.size, this.yPosition  + this.size);
-        g.drawPolygon(p);*/
-
         int[][] points = createPolygon();
         int[] xpoints = points[0];
         int[] ypoints = points[1];
@@ -116,11 +95,6 @@ public class SpaceShip extends JPanel {
             missile.draw(g);
         }
     }
-
-    public int getSizeOfAsteroid() {
-        return size;
-    }
-
     private int[][] createPolygon() {
         int[][] points = new int[2][4];
         int halfSize = size / 2;

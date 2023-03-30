@@ -32,7 +32,6 @@ public class GameContainer extends JPanel implements Pointable {
 
     Polygon defenderSpaceShip;
     double spawnInterVale = 100;
-    Polygon missilePorj;
     Thread moveThread;
     List<SpaceShip> spaceShip = new ArrayList<>();
 
@@ -93,21 +92,27 @@ public class GameContainer extends JPanel implements Pointable {
         super.paintComponent(g);
         defender.draw(g, (int) mousePosition.getX(), (int) mousePosition.getY());
         defenderSpaceShip = defender.getSpaceShipPolygon();
-        for (Asteroid a : asteroids) {
-            a.draw(g);
+        // error acures randomly no consistency
+        try {
+            for (Asteroid a : asteroids) {
+                a.draw(g);
 
-        }
-        defender.draw(g, (int) mousePosition.getX(), (int) mousePosition.getY());
-        for (Missile m : missiles) {
-            m.draw(g);
+            }
+            defender.draw(g, (int) mousePosition.getX(), (int) mousePosition.getY());
+            for (Missile m : missiles) {
+                m.draw(g);
+            }
+
+            for (SpaceShip m : spaceShip) {
+                m.draw(g);
+            }
+            for (Missile m : enamyMissiles) {
+                m.draw(g);
+            }
+        }catch (Exception e){
+        System.out.println("error");
         }
 
-        for (SpaceShip m : spaceShip) {
-            m.draw(g);
-        }
-        for (Missile m : enamyMissiles) {
-            m.draw(g);
-        }
 
 
     }
@@ -124,7 +129,7 @@ public class GameContainer extends JPanel implements Pointable {
                 if (defenderSpaceShip.contains(player.xpoints[i], player.ypoints[i])) {
                     // collision detected
                     reset = true;
-                    iterator.remove(); // använd iteratorns remove-metod istället för att ta bort direkt från listan
+                    iterator.remove();
                     break;
                 }
             }
@@ -170,9 +175,6 @@ public class GameContainer extends JPanel implements Pointable {
         }
 
         for (Integer i : replaceAsteroid) {
-            //this.remove(asteroids.get(i));
-            // asteroids.remove(asteroids.get(i));
-            // asteroids.add(i,generateAsteroid());
             asteroids.set(i, generateAsteroid());
 
         }
@@ -188,6 +190,8 @@ public class GameContainer extends JPanel implements Pointable {
             m.move();
             for (SpaceShip a : spaceShip) {
                 if (a.isPointInsidePolygon(m.getX(), m.getY())) {
+                    score = score + 10;
+                    scoreLabel.setText("Score: " + score);
                     replaceSpaceShip.add(spaceShip.indexOf(a));
                     removeMissile.add(m);
                     startTime = System.currentTimeMillis();
@@ -212,25 +216,27 @@ public class GameContainer extends JPanel implements Pointable {
 
     private void moveEmamyMissileSpaceShip() {
         boolean reset = false;
-        for (Missile m : enamyMissiles) {
+        Iterator<Missile> iterator = enamyMissiles.iterator();
+
+        while (iterator.hasNext()) {
+            Missile m = iterator.next();
             m.move();
             Polygon defenderPolygon = defender.getSpaceShipPolygon();
-            for(int i = 0; i < defenderPolygon.npoints; i++)
+            for (int i = 0; i < defenderPolygon.npoints; i++) {
                 if (defenderPolygon.contains(m.getX(), m.getY())) {
                     // collision detected
                     reset = true;
+                    iterator.remove();
                     break;
-                    }
-            if (!m.isVisible()) {
-                removeEnamyMissiles.add(m);
+                }
             }
-        }
-        for (Missile m : removeEnamyMissiles) {
-            enamyMissiles.remove(m);
+            if (!m.isVisible()) {
+                iterator.remove();
+            }
         }
         enamyMissiles.addAll(newEnamyMissiles);
         newEnamyMissiles.clear();
-        if(reset){
+        if (reset) {
             resetGame();
         }
         repaint();
