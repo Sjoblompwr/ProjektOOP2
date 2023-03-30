@@ -1,19 +1,13 @@
 package Domain;
-import java.util.List;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.TimerTask;
-import java.util.Timer;
 
 public class SpaceShip extends JPanel {
-    private int xPosition, yPosition, health, size;
+    private int xPosition, yPosition, size;
     double speed;
     private Color color;
     private Random rand;
-    private int shotInterval;
-    private Defender defender;
     private Missile missile;
     private Long spawnTime;
 
@@ -21,13 +15,10 @@ public class SpaceShip extends JPanel {
         this.xPosition = x;
         this.yPosition = y;
         this.speed = 1.8;
-        this.health = 3;
         this.size = 10;
         this.color = Color.RED;
-        this.defender = defender;
         this.spawnTime = System.currentTimeMillis();
         this.rand = new Random();
-        this.shotInterval = shotInterval;
         setFocusable(true);
     }
 

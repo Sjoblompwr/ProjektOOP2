@@ -25,6 +25,8 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     List<Missile> newMissiles = new ArrayList<>();
     List<Missile> removeMissile = new ArrayList<>();
     List<Asteroid> newAsteroidsFromExplodeAsteroids = new ArrayList<>();
+    private List<Missile> newEnamyMissiles = new ArrayList<>();
+    private List<Missile> enamyMissiles = new ArrayList<>();
 
     private Point mousePosition = new Point(0, 0);
     Defender defender = new Defender(350, 350);
@@ -60,7 +62,6 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
 
                     moveAsteroids();
                     moveMissle();
-                    moveMissileSpaseShip();
                     moveEmamyMissileSpaceShip();
                     index++;
                     if(index % 12 == 0){
@@ -202,34 +203,8 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
         }
     }
 
-    private void moveMissileSpaseShip() {
-        for (Missile m : missiles) {
-            m.move();
-            for (SpaceShip a : spaceShip) {
-                if (a.isPointInsidePolygon(m.getX(), m.getY())) {
-                    score = score + 10;
-                    scoreLabel.setText("Score: " + score);
-                    replaceSpaceShip.add(spaceShip.indexOf(a));
-                    removeMissile.add(m);
-                    startTime = System.currentTimeMillis();
-                }
-            }
-            if (!m.isVisible()) {
-                removeMissile.add(m);
-            }
 
-        }
-        for (Missile m : removeMissile) {
-            missiles.remove(m);
-        }
-        missiles.addAll(newMissiles);
-        newMissiles.clear();
-        repaint();
-    }
 
-    private List<Missile> newEnamyMissiles = new ArrayList<>();
-    private List<Missile> enamyMissiles = new ArrayList<>();
-    private List<Missile> removeEnamyMissiles = new ArrayList<>();
 
     private void moveEmamyMissileSpaceShip() {
         boolean reset = false;
@@ -282,7 +257,18 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
             for (Asteroid a : newAsteroidsFromExplodeAsteroids) {
                 asteroids.add(a);
             }
+
             newAsteroidsFromExplodeAsteroids.clear();
+
+            for (SpaceShip a : spaceShip) {
+                if (a.isPointInsidePolygon(m.getX(), m.getY())) {
+                    score = score + 10;
+                    scoreLabel.setText("Score: " + score);
+                    replaceSpaceShip.add(spaceShip.indexOf(a));
+                    removeMissile.add(m);
+                    startTime = System.currentTimeMillis();
+                }
+            }
             if (!m.isVisible()) {
                 removeMissile.add(m);
             }
@@ -396,7 +382,6 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
-        //defender.accelerate(e);
     }
     @Override
     public void keyPressed(KeyEvent e) {
