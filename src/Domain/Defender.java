@@ -71,7 +71,7 @@ public class Defender extends JPanel implements DefenderInterface {
         g2d.rotate(this.angle, xPosition, yPosition);
     }
 
-    public Missile shot(int x, int y, int dx, int dy) {
+    public Missile shot( int dx, int dy) {
         Missile missile = factory.createMissile(xPosition, yPosition, dx, dy);
         return missile;
     }

@@ -21,12 +21,6 @@ import java.awt.event.KeyListener;
 public class GameContainer extends JPanel implements Pointable,KeyListener{
     
 
-    List<Asteroid> asteroids = new ArrayList<>();
-    List<Integer> replaceAsteroid = new ArrayList<>();
-    List<Missile> missiles = new ArrayList<>();
-    List<Missile> newMissiles = new ArrayList<>();
-    List<Missile> removeMissile = new ArrayList<>();
-    List<Asteroid> newAsteroidsFromExplodeAsteroids = new ArrayList<>();
     private List<Missile> newEnamyMissiles = new ArrayList<>();
     private List<Missile> enamyMissiles = new ArrayList<>();
     private List<Asteroid> asteroids = new ArrayList<>();
@@ -36,16 +30,12 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     private List<Missile> missiles = new ArrayList<>();
     private List<Missile> newMissiles = new ArrayList<>();
     private List<Missile> removeMissile = new ArrayList<>();
-
-    private List<Missile> newEnamyMissiles = new ArrayList<>();
-    private List<Missile> enamyMissiles = new ArrayList<>();
     private List<SpaceShip> spaceShip = new ArrayList<>();
     private List<Integer> replaceSpaceShip = new ArrayList<>();
 
     private Point mousePosition = new Point(0, 0);
 
     Defender defender ;
-    private Defender defender = new Defender(350, 350);
 
     private int score = 0;
     JLabel scoreLabel;
@@ -53,17 +43,8 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     Polygon defenderSpaceShip;
     double spawnInterVale = 100;
     Thread moveThread;
-    List<SpaceShip> spaceShip = new ArrayList<>();
-    private JLabel scoreLabel;
-
     private int initAsteroidCount = 0;
     private int initSpaceShipCount = 0;
-
-    private Polygon defenderSpaceShip;
-    private double spawnInterVale = 1000;
-    private Thread moveThread;
-
-    List<Integer> replaceSpaceShip = new ArrayList<>();
 
     private long startTime;
 
@@ -169,42 +150,48 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     private void moveShip() {
         boolean reset = false;
         Iterator<SpaceShip> iterator = spaceShip.iterator();
-        while (iterator.hasNext()) {
-            SpaceShip b = iterator.next();
-            b.move();
-            Polygon player = b.getPolygon();
+        try {
+            while (iterator.hasNext()) {
+                SpaceShip b = iterator.next();
+                b.move();
+                Polygon player = b.getPolygon();
 
-            for (int i = 0; i < player.npoints; i++) {
-                if (defenderSpaceShip.contains(player.xpoints[i], player.ypoints[i])) {
-                    // collision detected
-                    reset = true;
-                    iterator.remove();
-                    break;
+                for (int i = 0; i < player.npoints; i++) {
+                    if (defenderSpaceShip.contains(player.xpoints[i], player.ypoints[i])) {
+                        // collision detected
+                        reset = true;
+                        iterator.remove();
+                        break;
+                    }
+                }
+                if (b.getX() < -5 || b.getX() > 700 || b.getY() < -5 || b.getY() > 700) {
+                    startTime = System.currentTimeMillis();
+                    replaceSpaceShip.add(spaceShip.indexOf(b));
                 }
             }
-            if (b.getX() < -5 || b.getX() > 700 || b.getY() < -5 || b.getY() > 700) {
-                startTime = System.currentTimeMillis();
-                replaceSpaceShip.add(spaceShip.indexOf(b));
+            if (!spaceShip.isEmpty()) {
+                for (Integer i : replaceSpaceShip) {
+                    SpaceShip b = spaceShip.get(i);
+                    spaceShip.remove(b); // ta bort element direkt från listan
+                }
             }
-        }
-        if (!spaceShip.isEmpty()) {
-            for (Integer i : replaceSpaceShip) {
-                SpaceShip b = spaceShip.get(i);
-                spaceShip.remove(b); // ta bort element direkt från listan
-            }
-        }
 
-        if (reset) {
-            resetGame();
-            replaceSpaceShip.clear();
-            startTime = System.currentTimeMillis();
-        } else if (System.currentTimeMillis() - startTime > spawnInterVale) {
-            if (!replaceSpaceShip.isEmpty()) {
-                spaceShip.add(generateSpaceShip());
+            if (reset) {
+                resetGame();
                 replaceSpaceShip.clear();
                 startTime = System.currentTimeMillis();
+            } else if (System.currentTimeMillis() - startTime > spawnInterVale) {
+                if (!replaceSpaceShip.isEmpty()) {
+                    spaceShip.add(generateSpaceShip());
+                    replaceSpaceShip.clear();
+                    startTime = System.currentTimeMillis();
+                }
             }
+
+        }catch (Exception e){
+
         }
+
     }
 
     private void moveAsteroids() {
@@ -342,16 +329,18 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
             rand = 0.45;
         Point startPosition = getRandomStartPosition();
 
-        return factory.createAsteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
+       // return factory.createAsteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
         // Create the asteroid with the generated position
-        return new Asteroid((int)startPosition.getX(),(int) startPosition.getY(), (int) (5 * rand) + 1, (int) (5 * Math.random()));
+        return factory.createAsteroid((int)startPosition.getX(),(int) startPosition.getY(), (int) (5 * rand) + 1, (int) (5 * Math.random()));
+      //  return new Asteroid((int)startPosition.getX(),(int) startPosition.getY(), (int) (5 * rand) + 1, (int) (5 * Math.random()));
 
     }
    
     public SpaceShip generateSpaceShip() {
-        return   factory.createSpaceShip(xPos, yPos, 1500, this.defender);
+
         Point startPosition = getRandomStartPosition();
-        return new SpaceShip((int) startPosition.getX(),(int) startPosition.getY() , 1500, this.defender);
+       // return new SpaceShip((int) startPosition.getX(),(int) startPosition.getY() , 1500, this.defender);
+        return   factory.createSpaceShip((int) startPosition.getX(),(int) startPosition.getY() , 1500, this.defender);
     }
 
     private Point getRandomStartPosition(){
