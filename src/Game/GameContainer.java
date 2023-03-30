@@ -15,8 +15,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
 
-public class GameContainer extends JPanel implements Pointable{
-    
+public class GameContainer extends JPanel implements Pointable {
+
 
     List<Asteroid> asteroids = new ArrayList<>();
     List<Integer> replaceAsteroid = new ArrayList<>();
@@ -39,7 +39,7 @@ public class GameContainer extends JPanel implements Pointable{
     List<Integer> replaceSpaceShip = new ArrayList<>();
     long startTime;
 
-    public GameContainer(){      
+    public GameContainer() {
         super();
         this.add(defender);
         addScoreScreen();
@@ -52,12 +52,12 @@ public class GameContainer extends JPanel implements Pointable{
             @Override
             public void run() {
                 while (true) {
-                   moveShip();
+                    moveShip();
 
                     moveAsteroids();
                     moveMissle();
                     moveMissileSpaseShip();
-                   moveEmamyMissileSpaceShip();
+                    moveEmamyMissileSpaceShip();
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -71,44 +71,47 @@ public class GameContainer extends JPanel implements Pointable{
         moveThread.start();
 
     }
-    private void addScoreScreen(){
+
+    private void addScoreScreen() {
         this.scoreLabel = new JLabel("Score: " + score);
         this.add(scoreLabel);
     }
 
-    public void addAsteroids(){
-        for(int i = 0; i < 20; i++){
+    public void addAsteroids() {
+        for (int i = 0; i < 20; i++) {
             asteroids.add(generateAsteroid());
         }
     }
-    public void addSpaceShip(){
-        for (int i = 0; i < 1 ; i++){
+
+    public void addSpaceShip() {
+        for (int i = 0; i < 1; i++) {
             spaceShip.add(generateSpaceShip());
         }
     }
 
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        defender.draw(g,(int) mousePosition.getX(), (int)mousePosition.getY());
+        defender.draw(g, (int) mousePosition.getX(), (int) mousePosition.getY());
         defenderSpaceShip = defender.getSpaceShipPolygon();
-        for(Asteroid a : asteroids){
+        for (Asteroid a : asteroids) {
             a.draw(g);
 
         }
-        defender.draw(g,(int) mousePosition.getX(), (int)mousePosition.getY());
-        for(Missile m : missiles){
+        defender.draw(g, (int) mousePosition.getX(), (int) mousePosition.getY());
+        for (Missile m : missiles) {
             m.draw(g);
         }
 
-        for(SpaceShip m : spaceShip){
+        for (SpaceShip m : spaceShip) {
             m.draw(g);
         }
-        for(Missile m: enamyMissiles){
+        for (Missile m : enamyMissiles) {
             m.draw(g);
         }
 
 
     }
+
     private void moveShip() {
         boolean reset = false;
         Iterator<SpaceShip> iterator = spaceShip.iterator();
@@ -117,8 +120,8 @@ public class GameContainer extends JPanel implements Pointable{
             b.move();
             Polygon player = b.getPolygon();
 
-            for (int i =0; i<player.npoints;i++){
-                if(defenderSpaceShip.contains(player.xpoints[i],player.ypoints[i])){
+            for (int i = 0; i < player.npoints; i++) {
+                if (defenderSpaceShip.contains(player.xpoints[i], player.ypoints[i])) {
                     // collision detected
                     reset = true;
                     iterator.remove(); // använd iteratorns remove-metod istället för att ta bort direkt från listan
@@ -148,9 +151,10 @@ public class GameContainer extends JPanel implements Pointable{
             }
         }
     }
+
     private void moveAsteroids() {
         boolean reset = false;
-        for(Asteroid a : asteroids){
+        for (Asteroid a : asteroids) {
             a.move();
             Polygon asteroidPolygon = a.getPolygon();
             for (int i = 0; i < asteroidPolygon.npoints; i++) {
@@ -160,12 +164,12 @@ public class GameContainer extends JPanel implements Pointable{
                     break;
                 }
             }
-            if(a.getXPosition() < -5 || a.getXPosition() > 700 || a.getYPosition() < -5 || a.getYPosition() > 700){
+            if (a.getXPosition() < -5 || a.getXPosition() > 700 || a.getYPosition() < -5 || a.getYPosition() > 700) {
                 replaceAsteroid.add(asteroids.indexOf(a));
             }
         }
 
-        for(Integer i : replaceAsteroid){
+        for (Integer i : replaceAsteroid) {
             //this.remove(asteroids.get(i));
             // asteroids.remove(asteroids.get(i));
             // asteroids.add(i,generateAsteroid());
@@ -174,37 +178,39 @@ public class GameContainer extends JPanel implements Pointable{
         }
 
         replaceAsteroid.clear();
-        if(reset){
+        if (reset) {
             resetGame();
         }
     }
 
-    private void moveMissileSpaseShip(){
-        for (Missile m : missiles){
+    private void moveMissileSpaseShip() {
+        for (Missile m : missiles) {
             m.move();
-            for (SpaceShip a : spaceShip){
-                if (a.isPointInsidePolygon(m.getX(),m.getY())){
+            for (SpaceShip a : spaceShip) {
+                if (a.isPointInsidePolygon(m.getX(), m.getY())) {
                     replaceSpaceShip.add(spaceShip.indexOf(a));
                     removeMissile.add(m);
                     startTime = System.currentTimeMillis();
                 }
             }
-            if(!m.isVisible()){
+            if (!m.isVisible()) {
                 removeMissile.add(m);
             }
 
         }
-        for(Missile m : removeMissile){
+        for (Missile m : removeMissile) {
             missiles.remove(m);
         }
         missiles.addAll(newMissiles);
         newMissiles.clear();
         repaint();
     }
+
     private List<Missile> newEnamyMissiles = new ArrayList<>();
     private List<Missile> enamyMissiles = new ArrayList<>();
     private List<Missile> removeEnamyMissiles = new ArrayList<>();
-    private void moveEmamyMissileSpaceShip(){
+
+    private void moveEmamyMissileSpaceShip() {
         boolean reset = false;
         for (Missile m : enamyMissiles) {
             m.move();
@@ -220,9 +226,9 @@ public class GameContainer extends JPanel implements Pointable{
                 removeEnamyMissiles.add(m);
             }
         }
-            for (Missile m : removeEnamyMissiles) {
-                enamyMissiles.remove(m);
-            }
+        for (Missile m : removeEnamyMissiles) {
+            enamyMissiles.remove(m);
+        }
         enamyMissiles.addAll(newEnamyMissiles);
         newEnamyMissiles.clear();
         repaint();
@@ -231,40 +237,40 @@ public class GameContainer extends JPanel implements Pointable{
 
     private void moveMissle() {
 
-        for(Missile m : missiles){
+        for (Missile m : missiles) {
             m.move();
-            for(Asteroid a : asteroids){
-                if(a.isPointInsidePolygon(m.getX(), m.getY())){
+            for (Asteroid a : asteroids) {
+                if (a.isPointInsidePolygon(m.getX(), m.getY())) {
                     score = score + 10;
                     scoreLabel.setText("Score: " + score);
-                    if(a.getSizeOfAsteroid() > 3){
+                    if (a.getSizeOfAsteroid() > 3) {
                         newAsteroidsFromExplodeAsteroids.add(
-                            new Asteroid(a.getXPosition(), a.getYPosition(),3, a.getDesign()));
+                                new Asteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
                         newAsteroidsFromExplodeAsteroids.add(
-                            new Asteroid(a.getXPosition(), a.getYPosition(),3, a.getDesign()));
+                                new Asteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
                     }
 
                     replaceAsteroid.add(asteroids.indexOf(a));
                     removeMissile.add(m);
                 }
             }
-            for(Asteroid a : newAsteroidsFromExplodeAsteroids){
+            for (Asteroid a : newAsteroidsFromExplodeAsteroids) {
                 asteroids.add(a);
             }
             newAsteroidsFromExplodeAsteroids.clear();
-            if(!m.isVisible()){
+            if (!m.isVisible()) {
                 removeMissile.add(m);
             }
 
         }
-        for(Missile m : removeMissile){
+        for (Missile m : removeMissile) {
             missiles.remove(m);
         }
         missiles.addAll(newMissiles);
         newMissiles.clear();
         repaint();
 
-       // System.out.println("Missile moved " + missiles.size());
+        // System.out.println("Missile moved " + missiles.size());
     }
 
     public Asteroid generateAsteroid() {
@@ -276,9 +282,9 @@ public class GameContainer extends JPanel implements Pointable{
         double rand;
 
         int xPos, yPos;
-      
+
         rand = Math.random();
-      
+
         // Determine which side the asteroid should appear from based on the random number
         if (rand < 0.25) {
             // Left side of the game window
@@ -297,16 +303,16 @@ public class GameContainer extends JPanel implements Pointable{
             xPos = (int) (Math.random() * gameWidth);
             yPos = gameHeight;
         }
-        if(rand < 0.4)
+        if (rand < 0.4)
             rand = 0.45;
 
         // Create the asteroid with the generated position
-       return new Asteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5*Math.random()));
+        return new Asteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
 
     }
 
 
-    private void resetGame(){
+    private void resetGame() {
         asteroids.clear();
         spaceShip.clear();
         addAsteroids();
@@ -315,6 +321,7 @@ public class GameContainer extends JPanel implements Pointable{
         scoreLabel.setText("Score: " + score);
         repaint();
     }
+
     private SpaceShip generateSpaceShip() {
 
         int gameWidth = 650;
@@ -344,14 +351,14 @@ public class GameContainer extends JPanel implements Pointable{
         }
 
         // Create the SpaceShip with the generated position
-        SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500,this.defender);
+        SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500, this.defender);
         // Make the SpaceShip shoot a Missile towards the defender
 
-       // double dx = defender.getXPosition() - newSpaceShip.getX();
-       // double dy = defender.getYPosition() - newSpaceShip.getY();
-       // double angle = Math.atan2(dy, dx);
-       // Missile missile = newSpaceShip.shoot(angle);
-        Timer  timer = new Timer();
+        // double dx = defender.getXPosition() - newSpaceShip.getX();
+        // double dy = defender.getYPosition() - newSpaceShip.getY();
+        // double angle = Math.atan2(dy, dx);
+        // Missile missile = newSpaceShip.shoot(angle);
+        Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -359,21 +366,21 @@ public class GameContainer extends JPanel implements Pointable{
                 double dx = defender.getXPosition() - spaceShip.get(0).getX();
                 double dy = defender.getYPosition() - spaceShip.get(0).getY();
                 double angle = Math.atan2(dy, dx);
-                newEnamyMissiles.add(spaceShip.get(0).shoot(new Point(defender.getXPosition(),defender.getYPosition())));
+                newEnamyMissiles.add(spaceShip.get(0).shoot(new Point(defender.getXPosition(), defender.getYPosition())));
 
             }
         }, 0, 1500);
 
 
-       // newEnamyMissiles.add(missile);
+        // newEnamyMissiles.add(missile);
 
         return newSpaceShip;
     }
+
     @Override
     public void pointerDown(Point point) {
-        newMissiles.add(defender.shot(defender.getX(),defender.getY(),(int)point.getX(), (int)point.getY()));
+        newMissiles.add(defender.shot(defender.getX(), defender.getY(), (int) point.getX(), (int) point.getY()));
     }
-
 
 
     @Override
@@ -384,8 +391,6 @@ public class GameContainer extends JPanel implements Pointable{
     public List<Asteroid> getAsteroids() {
         return asteroids;
     }
-
-
 
 
 }
