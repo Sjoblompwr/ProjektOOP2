@@ -16,7 +16,6 @@ public class Asteroid extends JPanel {
     private int design;
 
     public Asteroid(int x, int y, int size,int design) {
-        System.out.println("Asteroid size: " + size);
         this.xPosition = x;
         this.yPosition = y;
         this.size = size;

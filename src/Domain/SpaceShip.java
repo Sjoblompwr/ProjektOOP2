@@ -28,6 +28,7 @@ public class SpaceShip extends JPanel {
 
         this.rand = new Random();
         this.shotInterval = shotInterval;
+        //startShooting();
         setFocusable(true);
     }
 
