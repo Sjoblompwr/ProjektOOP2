@@ -38,6 +38,7 @@ public class GameContainer extends JPanel implements Pointable {
     List<Integer> replaceSpaceShip = new ArrayList<>();
     long startTime;
 
+    private int index = 0;
     public GameContainer() {
         super();
         this.add(defender);
@@ -57,6 +58,10 @@ public class GameContainer extends JPanel implements Pointable {
                     moveMissle();
                     moveMissileSpaseShip();
                     moveEmamyMissileSpaceShip();
+                    index++;
+                    if(index % 12 == 0){
+                        enemyShot();
+                    }
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException e) {
@@ -68,6 +73,15 @@ public class GameContainer extends JPanel implements Pointable {
 
         // Start the threads
         moveThread.start();
+
+    }
+
+    private void enemyShot(){
+        for(SpaceShip s : spaceShip){
+            Missile missile = s.shoot(new Point(defender.getXPosition(),defender.getYPosition()));
+            if(!(missile == null))
+                newEnamyMissiles.add(missile);
+        }
 
     }
 
@@ -361,26 +375,6 @@ public class GameContainer extends JPanel implements Pointable {
         // Create the SpaceShip with the generated position
         SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500, this.defender);
         // Make the SpaceShip shoot a Missile towards the defender
-
-        // double dx = defender.getXPosition() - newSpaceShip.getX();
-        // double dy = defender.getYPosition() - newSpaceShip.getY();
-        // double angle = Math.atan2(dy, dx);
-        // Missile missile = newSpaceShip.shoot(angle);
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-
-                double dx = defender.getXPosition() - spaceShip.get(0).getX();
-                double dy = defender.getYPosition() - spaceShip.get(0).getY();
-                double angle = Math.atan2(dy, dx);
-                newEnamyMissiles.add(spaceShip.get(0).shoot(new Point(defender.getXPosition(), defender.getYPosition())));
-
-            }
-        }, 0, 1500);
-
-
-        // newEnamyMissiles.add(missile);
 
         return newSpaceShip;
     }

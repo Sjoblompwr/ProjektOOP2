@@ -15,6 +15,7 @@ public class SpaceShip extends JPanel {
     private int shotInterval;
     private Defender defender;
     private Missile missile;
+    private Long spawnTime;
 
     public SpaceShip(int x, int y, int shotInterval,Defender defender) {
         this.xPosition = x;
@@ -24,7 +25,7 @@ public class SpaceShip extends JPanel {
         this.size = 10;
         this.color = Color.RED;
         this.defender = defender;
-
+        this.spawnTime = System.currentTimeMillis();
         this.rand = new Random();
         this.shotInterval = shotInterval;
         setFocusable(true);
@@ -32,12 +33,7 @@ public class SpaceShip extends JPanel {
 
 
 
-    public void stopShooting() {
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
+
 
     public void move() {
         // Generate random angle
@@ -77,8 +73,10 @@ public class SpaceShip extends JPanel {
     }
     private long lastShotTime = 0;
     public Missile shoot(Point point) {
-
-        return new Missile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
+        if(System.currentTimeMillis() - spawnTime > 1000)
+            return new Missile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
+        else
+            return null;
     }
 
     public void draw(Graphics g) {
