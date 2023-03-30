@@ -9,6 +9,7 @@ import Domain.*;
 import Domain.Asteroid;
 import Domain.Defender;
 import Domain.Missile;
+import Factory.Factory;
 import MouseHandler.Pointable;
 
 import java.awt.Graphics;
@@ -25,12 +26,14 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     List<Missile> newMissiles = new ArrayList<>();
     List<Missile> removeMissile = new ArrayList<>();
     List<Asteroid> newAsteroidsFromExplodeAsteroids = new ArrayList<>();
-
+    private List<Missile> newEnamyMissiles = new ArrayList<>();
+    private List<Missile> enamyMissiles = new ArrayList<>();
     private Point mousePosition = new Point(0, 0);
+
     Defender defender = new Defender(350, 350);
     private int score = 0;
     JLabel scoreLabel;
-
+    Factory factory = new Factory();
     Polygon defenderSpaceShip;
     double spawnInterVale = 100;
     Thread moveThread;
@@ -227,9 +230,6 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
         repaint();
     }
 
-    private List<Missile> newEnamyMissiles = new ArrayList<>();
-    private List<Missile> enamyMissiles = new ArrayList<>();
-    private List<Missile> removeEnamyMissiles = new ArrayList<>();
 
     private void moveEmamyMissileSpaceShip() {
         boolean reset = false;
@@ -270,9 +270,11 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
                     scoreLabel.setText("Score: " + score);
                     if (a.getSizeOfAsteroid() > 3) {
                         newAsteroidsFromExplodeAsteroids.add(
-                                new Asteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
+                                factory.createAsteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
+                           //     new Asteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
                         newAsteroidsFromExplodeAsteroids.add(
-                                new Asteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
+                               // new Asteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
+                                factory.createAsteroid(a.getXPosition(), a.getYPosition(), 3, a.getDesign()));
                     }
 
                     replaceAsteroid.add(asteroids.indexOf(a));
@@ -326,9 +328,9 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
         }
         if (rand < 0.4)
             rand = 0.45;
-
+        return factory.createAsteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
         // Create the asteroid with the generated position
-        return new Asteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
+      //  return new Asteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
 
     }
 
@@ -371,11 +373,12 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
             yPos = gameHeight;
         }
 
+        return   factory.createSpaceShip(xPos, yPos, 1500, this.defender);
         // Create the SpaceShip with the generated position
-        SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500, this.defender);
+        //SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500, this.defender);
         // Make the SpaceShip shoot a Missile towards the defender
 
-        return newSpaceShip;
+      //  return newSpaceShip;
     }
 
     @Override

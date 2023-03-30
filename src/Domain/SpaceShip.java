@@ -1,11 +1,8 @@
 package Domain;
-import java.util.List;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.TimerTask;
-import java.util.Timer;
 
 public class SpaceShip extends JPanel {
     private int xPosition, yPosition, health, size;
@@ -17,7 +14,7 @@ public class SpaceShip extends JPanel {
     private Missile missile;
     private Long spawnTime;
 
-    public SpaceShip(int x, int y, int shotInterval,Defender defender) {
+    public SpaceShip(int x, int y, int shotInterval, Defender defender) {
         this.xPosition = x;
         this.yPosition = y;
         this.speed = 1.8;
