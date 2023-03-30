@@ -46,6 +46,11 @@ public class Missile extends JPanel{
         g.setColor(Color.BLACK);
         g.fillRect(x, y, width, height);
     }
+
+    public void drawRed(Graphics g) {
+        g.setColor(Color.RED);
+        g.fillRect(x, y, width, height);
+    }
     
     public void move() {
         Point thirdPoint = calculateThirdPoint(new Point(x, y), new Point(dx, dy)); // calculate the third point

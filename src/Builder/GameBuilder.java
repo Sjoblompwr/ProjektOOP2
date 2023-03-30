@@ -22,17 +22,18 @@ public class GameBuilder {
         for (int i = 0; i < count; i++) {
             gameContainer.getAsteroids().add(gameContainer.generateAsteroid());
         }
+        gameContainer.setInitAsteroidCount(count);
         return this;
     }
 
-    /*
-     * public GameBuilder setEnemiesCount(int count) { gameContainer.getEnemies().clear(); 
-     * for (int i = 0; i < count; i++) {
-     * gameContainer.getEnemies().add(gameContainer.generateEnemy()); 
-     * } 
-     * return this; 
-     * }
-     */
+    public GameBuilder setEnemiesCount(int count) {
+        gameContainer.getEnemies().clear();
+        for (int i = 0; i < count; i++) {
+            gameContainer.getEnemies().add(gameContainer.generateSpaceShip());
+        }
+        gameContainer.setInitSpaceShipCount(count);
+        return this;
+    }
 
     public GameContainer build() {
         return gameContainer;

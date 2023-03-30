@@ -10,6 +10,7 @@ import Domain.Asteroid;
 import Domain.Defender;
 import Domain.Missile;
 import MouseHandler.Pointable;
+import States.State;
 
 import java.awt.Graphics;
 import java.awt.Point;
@@ -19,35 +20,42 @@ import java.awt.event.KeyListener;
 public class GameContainer extends JPanel implements Pointable,KeyListener{
     
 
-    List<Asteroid> asteroids = new ArrayList<>();
-    List<Integer> replaceAsteroid = new ArrayList<>();
-    List<Missile> missiles = new ArrayList<>();
-    List<Missile> newMissiles = new ArrayList<>();
-    List<Missile> removeMissile = new ArrayList<>();
-    List<Asteroid> newAsteroidsFromExplodeAsteroids = new ArrayList<>();
+    private List<Asteroid> asteroids = new ArrayList<>();
+    private List<Integer> replaceAsteroid = new ArrayList<>();
+    private List<Asteroid> newAsteroidsFromExplodeAsteroids = new ArrayList<>();
+
+    private List<Missile> missiles = new ArrayList<>();
+    private List<Missile> newMissiles = new ArrayList<>();
+    private List<Missile> removeMissile = new ArrayList<>();
+
     private List<Missile> newEnamyMissiles = new ArrayList<>();
     private List<Missile> enamyMissiles = new ArrayList<>();
+    private List<SpaceShip> spaceShip = new ArrayList<>();
+    private List<Integer> replaceSpaceShip = new ArrayList<>();
 
     private Point mousePosition = new Point(0, 0);
-    Defender defender = new Defender(350, 350);
+    private Defender defender = new Defender(350, 350);
+
     private int score = 0;
-    JLabel scoreLabel;
+    private JLabel scoreLabel;
 
-    Polygon defenderSpaceShip;
-    double spawnInterVale = 100;
-    Thread moveThread;
-    List<SpaceShip> spaceShip = new ArrayList<>();
+    private int initAsteroidCount = 0;
+    private int initSpaceShipCount = 0;
+    
+    private Polygon defenderSpaceShip;
+    private double spawnInterVale = 1000;
+    private Thread moveThread;
 
-    List<Integer> replaceSpaceShip = new ArrayList<>();
 
-    long startTime;
+    private long startTime;
+
+    public State state;
 
     private int index = 0;
     public GameContainer() {
         super();
         this.add(defender);
         addScoreScreen();
-        addSpaceShip();
         this.addKeyListener(this);
         this.setFocusable(true);
         defenderSpaceShip = defender.getSpaceShipPolygon();
@@ -64,7 +72,7 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
                     moveMissle();
                     moveEmamyMissileSpaceShip();
                     index++;
-                    if(index % 12 == 0){
+                    if(index % 24 == 0){
                         enemyShot();
                     }
                     try {
@@ -84,8 +92,9 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     private void enemyShot(){
         for(SpaceShip s : spaceShip){
             Missile missile = s.shoot(new Point(defender.getXPosition(),defender.getYPosition()));
-            if(!(missile == null))
+            if(!(missile == null)){
                 newEnamyMissiles.add(missile);
+        }
         }
 
     }
@@ -96,13 +105,13 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     }
 
     public void addAsteroids() {
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < initAsteroidCount; i++) {
             asteroids.add(generateAsteroid());
         }
     }
 
     public void addSpaceShip() {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < initSpaceShipCount; i++) {
             spaceShip.add(generateSpaceShip());
         }
     }
@@ -126,7 +135,7 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
                 m.draw(g);
             }
             for (Missile m : enamyMissiles) {
-                m.draw(g);
+                m.drawRed(g);
             }
         }catch (Exception e){
         System.out.println("error");
@@ -159,7 +168,8 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
         }
         if (!spaceShip.isEmpty()) {
             for (Integer i : replaceSpaceShip) {
-                spaceShip.remove(spaceShip.get(i)); // ta bort element direkt från listan
+                SpaceShip b = spaceShip.get(i);
+                spaceShip.remove(b); // ta bort element direkt från listan
             }
         }
 
@@ -202,9 +212,6 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
             resetGame();
         }
     }
-
-
-
 
     private void moveEmamyMissileSpaceShip() {
         boolean reset = false;
@@ -283,6 +290,22 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
     }
 
     public Asteroid generateAsteroid() {
+        double rand = Math.random();
+        if (rand < 0.4)
+            rand = 0.45;
+        Point startPosition = getRandomStartPosition();
+        // Create the asteroid with the generated position
+        return new Asteroid((int)startPosition.getX(),(int) startPosition.getY(), (int) (5 * rand) + 1, (int) (5 * Math.random()));
+
+    }
+   
+    public SpaceShip generateSpaceShip() {
+
+        Point startPosition = getRandomStartPosition();
+        return new SpaceShip((int) startPosition.getX(),(int) startPosition.getY() , 1500, this.defender);
+    }
+
+    private Point getRandomStartPosition(){
         int gameWidth = 650;
         int gameHeight = 650;
 
@@ -310,63 +333,26 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
             xPos = (int) (Math.random() * gameWidth);
             yPos = gameHeight;
         }
-        if (rand < 0.4)
-            rand = 0.45;
-
-        // Create the asteroid with the generated position
-        return new Asteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
-
+        return new Point(xPos, yPos);
     }
-
 
     private void resetGame() {
         asteroids.clear();
         spaceShip.clear();
         addAsteroids();
         addSpaceShip();
+        enamyMissiles.clear();
         score = 0;
         scoreLabel.setText("Score: " + score);
+        defender.reset();
         repaint();
     }
 
-    private SpaceShip generateSpaceShip() {
 
-        int gameWidth = 650;
-        int gameHeight = 650;
-        // Generate a random number between 0 and 1
-        double rand = Math.random();
-
-        int xPos, yPos;
-
-        // Determine which side the SpaceShip should appear from based on the random number
-        if (rand < 0.25) {
-            // Left side of the game window
-            xPos = 0;
-            yPos = (int) (Math.random() * gameHeight);
-        } else if (rand < 0.5) {
-            // Top side of the game window
-            xPos = (int) (Math.random() * gameWidth);
-            yPos = 0;
-        } else if (rand < 0.75) {
-            // Right side of the game window
-            xPos = gameWidth;
-            yPos = (int) (Math.random() * gameHeight);
-        } else {
-            // Bottom side of the game window
-            xPos = (int) (Math.random() * gameWidth);
-            yPos = gameHeight;
-        }
-
-        // Create the SpaceShip with the generated position
-        SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500, this.defender);
-        // Make the SpaceShip shoot a Missile towards the defender
-
-        return newSpaceShip;
-    }
 
     @Override
     public void pointerDown(Point point) {
-        newMissiles.add(defender.shot(defender.getX(), defender.getY(), (int) point.getX(), (int) point.getY()));
+        newMissiles.add(defender.shot((int) point.getX(), (int) point.getY()));
     }
 
 
@@ -377,6 +363,9 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
 
     public List<Asteroid> getAsteroids() {
         return asteroids;
+    }
+    public List<SpaceShip> getEnemies(){
+        return spaceShip;
     }
 
 
@@ -392,7 +381,14 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
         defender.accelerate(e,mousePosition);
     }
 
+    public void setInitAsteroidCount(int count) {
+        this.initAsteroidCount = count;
+    }
 
+
+    public void setInitSpaceShipCount(int count) {
+        this.initSpaceShipCount = count;
+    }
 
 
 }

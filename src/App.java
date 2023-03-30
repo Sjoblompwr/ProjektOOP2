@@ -55,6 +55,16 @@ class Game extends JFrame {
         asteroidPanel.add(asteroidLabel);
         asteroidPanel.add(asteroidSpinner);
         menuPanel.add(asteroidPanel);
+
+        // Spaceship count spinner
+        JLabel spaceshipLabel = new JLabel("Spaceship count:");
+        SpinnerModel spaceshipModel = new SpinnerNumberModel(1, 1, 10, 1); // Initial value, min, max, step
+        JSpinner spaceshipSpinner = new JSpinner(spaceshipModel);
+        spaceshipSpinner.setPreferredSize(new Dimension(80, 30));
+        JPanel spaceshipPanel = new JPanel();
+        spaceshipPanel.add(spaceshipLabel);
+        spaceshipPanel.add(spaceshipSpinner);
+        menuPanel.add(spaceshipPanel);
     
         JPanel scrollPanel = new JPanel();
         menuPanel.add(scrollPanel);
@@ -64,6 +74,7 @@ class Game extends JFrame {
         startGameButton.addActionListener(e -> {
             gameContainer = new GameBuilder()
                     .setAsteroidCount((int) asteroidSpinner.getValue())
+                    .setEnemiesCount((int) spaceshipSpinner.getValue())
                     .build();
             add(gameContainer);
             menuPanel.setVisible(false);

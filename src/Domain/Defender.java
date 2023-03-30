@@ -67,7 +67,7 @@ public class Defender extends JPanel {
         g2d.rotate(this.angle, xPosition, yPosition);
     }
 
-    public Missile shot(int x, int y, int dx, int dy) {
+    public Missile shot(int dx, int dy) {
         // x and y position of the defender to reach the point where the missile is shot
         Missile missile = new Missile(xPosition, yPosition, dx, dy);
         return missile;
@@ -142,14 +142,12 @@ public class Defender extends JPanel {
                 // Update the x and y velocities based on the angle
                 this.velocityX += Math.cos(angle) * this.thrustPower;
                 this.velocityY += Math.sin(angle) * this.thrustPower;
-
                 break;
 
             case KeyEvent.VK_DOWN:
                 // Reduce the speed by a fraction
                 this.velocityX *= 0.9;
                 this.velocityY *= 0.9;
-
                 break;
         }
 
@@ -165,6 +163,14 @@ public class Defender extends JPanel {
         this.yPoints = new int[] { yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size };
 
         repaint();
+    }
+
+    public void reset(){
+        this.xPosition = 350;
+        this.yPosition = 350;
+        this.angle = 0;
+        this.xPoints = new int[] { xPosition, xPosition + size, xPosition, xPosition - size };
+        this.yPoints = new int[] { yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size };
     }
 
 }

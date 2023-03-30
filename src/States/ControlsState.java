@@ -4,6 +4,25 @@ import java.awt.Point;
 
 public class ControlsState extends State {
 
+    
+    @Override
+    void initialize() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'initialize'");
+    }
+    
+    @Override
+    void draw() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'draw'");
+    }
+    
+    @Override
+    void exit() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'exit'");
+    }
+    
     @Override
     public void pointerDown(Point point) {
         // TODO Auto-generated method stub
@@ -15,5 +34,4 @@ public class ControlsState extends State {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'pointerMoved'");
     }
-    
 }

@@ -50,19 +50,7 @@ public class SpaceShip extends JPanel {
         }
     }
 
-    public Missile shot(Defender player) {
-        int dx = player.getX() - this.xPosition;
-        int dy = player.getY() - this.yPosition;
-        double direction = Math.atan2(dy, dx);
-        double deviation = Math.toRadians(rand.nextInt(20) - 10);
-        direction += deviation;
-        int speed = 5;
-        int missileX = (int) (this.xPosition + Math.cos(direction) * this.size / 2);
-        int missileY = (int) (this.yPosition + Math.sin(direction) * this.size / 2);
-        missile = new Missile(missileX, missileY, (int) (speed * Math.cos(direction)), (int) (speed * Math.sin(direction)));
-        return missile;
-    }
-    private long lastShotTime = 0;
+
     public Missile shoot(Point point) {
         if(System.currentTimeMillis() - spawnTime > 1000)
             return new Missile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
