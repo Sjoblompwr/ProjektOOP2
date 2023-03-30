@@ -37,17 +37,17 @@ public class SpaceShip extends JPanel implements ComonInterFace {
 
 
     public void move() {
-        // Generate random angle
+
         double angle = Math.random() * 2 * Math.PI;
-        // Generate random magnitude
+
         double magnitude = rand.nextGaussian() * 1 + 1;
-        // Calculate movement vector
+
         int dx = (int) (magnitude * speed * Math.cos(angle));
         int dy = (int) (magnitude * speed * Math.sin(angle));
-        // Update position
+
         this.xPosition += dx + this.speed;
         this.yPosition += dy + this.speed;
-        // Randomize movement direction
+
         int gameWidth = 650;
         int gameHeight = 650;
 
