@@ -214,14 +214,13 @@ public class GameContainer extends JPanel implements Pointable {
         boolean reset = false;
         for (Missile m : enamyMissiles) {
             m.move();
-            Polygon defenderPolygon = m.getPolygon();
-            System.out.println("Missle position: " + m.getX() + "y: " + m.getY());
-            System.out.println("Defener positon: " + defender.getXPosition() + "defender y: " + defender.getYPosition());
-            if (defender.isPointInsidePolygon(m.getX(), m.getY())) {
-                System.out.println("DEFENDER HIT!");
-                removeEnamyMissiles.add(m);
-                startTime = System.currentTimeMillis();
-            }
+            Polygon defenderPolygon = defender.getSpaceShipPolygon();
+            for(int i = 0; i < defenderPolygon.npoints; i++)
+                if (defenderPolygon.contains(m.getX(), m.getY())) {
+                    // collision detected
+                    reset = true;
+                    break;
+                    }
             if (!m.isVisible()) {
                 removeEnamyMissiles.add(m);
             }
@@ -231,6 +230,9 @@ public class GameContainer extends JPanel implements Pointable {
         }
         enamyMissiles.addAll(newEnamyMissiles);
         newEnamyMissiles.clear();
+        if(reset){
+            resetGame();
+        }
         repaint();
 
     }
