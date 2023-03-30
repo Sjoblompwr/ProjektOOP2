@@ -18,7 +18,7 @@ import MouseHandler.Pointable;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Polygon;
-public class GameContainer extends JPanel implements Pointable{
+public class GameContainer extends JPanel implements Pointable,KeyListener{
     
 
     List<Asteroid> asteroids = new ArrayList<>();
@@ -38,6 +38,7 @@ public class GameContainer extends JPanel implements Pointable{
     List<SpaceShip> spaceShip = new ArrayList<>();
 
     List<Integer> replaceSpaceShip = new ArrayList<>();
+
     long startTime;
 
     public GameContainer(){      
@@ -45,6 +46,8 @@ public class GameContainer extends JPanel implements Pointable{
         this.add(defender);
         addScoreScreen();
         addSpaceShip();
+        this.addKeyListener(this);
+        this.setFocusable(true);
         defenderSpaceShip = defender.getSpaceShipPolygon();
 
 
@@ -54,7 +57,6 @@ public class GameContainer extends JPanel implements Pointable{
             public void run() {
                 while (true) {
                    moveShip();
-
                     moveAsteroids();
                     moveMissle();
                     moveMissileSpa();
@@ -162,12 +164,7 @@ public class GameContainer extends JPanel implements Pointable{
         }
 
         for(Integer i : replaceAsteroid){
-            System.out.println("Replace asteroid");
-            //this.remove(asteroids.get(i));
-            // asteroids.remove(asteroids.get(i));
-            // asteroids.add(i,generateAsteroid());
             asteroids.set(i, generateAsteroid());
-
         }
 
         replaceAsteroid.clear();
@@ -181,7 +178,7 @@ public class GameContainer extends JPanel implements Pointable{
             m.move();
             for (SpaceShip a : spaceShip){
                 if (a.isPointInsidePolygon(m.getX(),m.getY())){
-                    System.out.println("Hit  spaceShip");
+                    
                     replaceSpaceShip.add(spaceShip.indexOf(a));
                     removeMissile.add(m);
                     startTime = System.currentTimeMillis();
@@ -207,7 +204,7 @@ public class GameContainer extends JPanel implements Pointable{
             m.move();
             for(Asteroid a : asteroids){
                 if(a.isPointInsidePolygon(m.getX(), m.getY())){
-                    System.out.println("Hit");
+                    
                     score = score + 10;
                     scoreLabel.setText("Score: " + score);
                     if(a.getSizeOfAsteroid() > 3){
@@ -236,16 +233,12 @@ public class GameContainer extends JPanel implements Pointable{
         missiles.addAll(newMissiles);
         newMissiles.clear();
         repaint();
-
-       // System.out.println("Missile moved " + missiles.size());
     }
 
     public Asteroid generateAsteroid() {
-        // The width and height of the game window where the asteroids can appear
         int gameWidth = 650;
         int gameHeight = 650;
 
-        // Generate a random number between 0 and 1
         double rand;
 
         int xPos, yPos;
@@ -316,7 +309,6 @@ public class GameContainer extends JPanel implements Pointable{
 
         // Create the SpaceShip with the generated position
         SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500);
-        boolean reset = false;
         // Make the SpaceShip shoot a Missile
         newSpaceShip.startShooting(defender);
 
@@ -336,6 +328,20 @@ public class GameContainer extends JPanel implements Pointable{
 
     public List<Asteroid> getAsteroids() {
         return asteroids;
+    }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        //defender.accelerate(e);
+    }
+    @Override
+    public void keyPressed(KeyEvent e) {
+        defender.accelerate(e,mousePosition);
+    }
+    @Override
+    public void keyReleased(KeyEvent e) {
+        defender.accelerate(e,mousePosition);
     }
 
 
