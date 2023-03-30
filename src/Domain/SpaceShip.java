@@ -8,12 +8,10 @@ import java.awt.*;
 import java.util.Random;
 
 public class SpaceShip extends JPanel implements ComonInterFace {
-    private int xPosition, yPosition, health, size;
+    private int xPosition, yPosition, size;
     double speed;
     private Color color;
     private Random rand;
-    private int shotInterval;
-    private Defender defender;
     private Missile missile;
     private Long spawnTime;
     Factory factory = new Factory();
@@ -22,13 +20,10 @@ public class SpaceShip extends JPanel implements ComonInterFace {
         this.xPosition = x;
         this.yPosition = y;
         this.speed = 1.8;
-        this.health = 3;
         this.size = 10;
         this.color = Color.RED;
-        this.defender = defender;
         this.spawnTime = System.currentTimeMillis();
         this.rand = new Random();
-        this.shotInterval = shotInterval;
         setFocusable(true);
     }
 
@@ -60,19 +55,7 @@ public class SpaceShip extends JPanel implements ComonInterFace {
         }
     }
 
-    public Missile shot(Defender player) {
-        int dx = player.getX() - this.xPosition;
-        int dy = player.getY() - this.yPosition;
-        double direction = Math.atan2(dy, dx);
-        double deviation = Math.toRadians(rand.nextInt(20) - 10);
-        direction += deviation;
-        int speed = 5;
-        int missileX = (int) (this.xPosition + Math.cos(direction) * this.size / 2);
-        int missileY = (int) (this.yPosition + Math.sin(direction) * this.size / 2);
-        missile = new Missile(missileX, missileY, (int) (speed * Math.cos(direction)), (int) (speed * Math.sin(direction)));
-        return missile;
-    }
-    private long lastShotTime = 0;
+
     public Missile shoot(Point point) {
         if(System.currentTimeMillis() - spawnTime > 1000)
           return   missile = factory.createMissile(xPosition, yPosition, (int)point.getX(),(int) point.getY());

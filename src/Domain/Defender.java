@@ -145,14 +145,12 @@ public class Defender extends JPanel implements DefenderInterface {
 
                 this.velocityX += Math.cos(angle) * this.thrustPower;
                 this.velocityY += Math.sin(angle) * this.thrustPower;
-
                 break;
 
             case KeyEvent.VK_DOWN:
 
                 this.velocityX *= 0.9;
                 this.velocityY *= 0.9;
-
                 break;
         }
 
@@ -163,10 +161,19 @@ public class Defender extends JPanel implements DefenderInterface {
         this.xPosition += this.velocityX;
         this.yPosition += this.velocityY;
 
+        // Update the points of the polygon based on the new position
         this.xPoints = new int[] { xPosition, xPosition + size, xPosition, xPosition - size };
         this.yPoints = new int[] { yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size };
 
         repaint();
+    }
+
+    public void reset(){
+        this.xPosition = 350;
+        this.yPosition = 350;
+        this.angle = 0;
+        this.xPoints = new int[] { xPosition, xPosition + size, xPosition, xPosition - size };
+        this.yPoints = new int[] { yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size };
     }
 
 }
