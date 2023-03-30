@@ -104,6 +104,7 @@ public class Defender extends JPanel implements ActionListener,KeyListener {
         // create and return the rotated polygon
         return new Polygon(rotatedXPoints, rotatedYPoints, xPoints.length);
     }
+
     public boolean isPointInsidePolygon(int x, int y) {
         int[] xpoints =  {xPosition, xPosition + size, xPosition, xPosition - size};
         int[] ypoints = {yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size};
