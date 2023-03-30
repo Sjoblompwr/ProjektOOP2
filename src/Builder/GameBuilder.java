@@ -24,16 +24,6 @@ public class GameBuilder {
         }
         return this;
     }
-
-    /*
-     * public GameBuilder setEnemiesCount(int count) { gameContainer.getEnemies().clear(); 
-     * for (int i = 0; i < count; i++) {
-     * gameContainer.getEnemies().add(gameContainer.generateEnemy()); 
-     * } 
-     * return this; 
-     * }
-     */
-
     public GameContainer build() {
         return gameContainer;
     }

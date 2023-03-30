@@ -163,7 +163,7 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
         }
         if (!spaceShip.isEmpty()) {
             for (Integer i : replaceSpaceShip) {
-                spaceShip.remove(spaceShip.get(i)); // ta bort element direkt från listan
+                spaceShip.remove(spaceShip.get(i));
             }
         }
 
@@ -310,29 +310,27 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
 
         rand = Math.random();
 
-        // Determine which side the asteroid should appear from based on the random number
+
         if (rand < 0.25) {
             // Left side of the game window
             xPos = 0;
             yPos = (int) (Math.random() * gameHeight);
         } else if (rand < 0.5) {
-            // Top side of the game window
+
             xPos = (int) (Math.random() * gameWidth);
             yPos = 0;
         } else if (rand < 0.75) {
-            // Right side of the game window
+
             xPos = gameWidth;
             yPos = (int) (Math.random() * gameHeight);
         } else {
-            // Bottom side of the game window
+
             xPos = (int) (Math.random() * gameWidth);
             yPos = gameHeight;
         }
         if (rand < 0.4)
             rand = 0.45;
         return factory.createAsteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
-        // Create the asteroid with the generated position
-      //  return new Asteroid(xPos, yPos, (int) (5 * rand) + 1, (int) (5 * Math.random()));
 
     }
 
@@ -351,36 +349,30 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
 
         int gameWidth = 650;
         int gameHeight = 650;
-        // Generate a random number between 0 and 1
+
         double rand = Math.random();
 
         int xPos, yPos;
 
-        // Determine which side the SpaceShip should appear from based on the random number
         if (rand < 0.25) {
-            // Left side of the game window
+
             xPos = 0;
             yPos = (int) (Math.random() * gameHeight);
         } else if (rand < 0.5) {
-            // Top side of the game window
+
             xPos = (int) (Math.random() * gameWidth);
             yPos = 0;
         } else if (rand < 0.75) {
-            // Right side of the game window
+
             xPos = gameWidth;
             yPos = (int) (Math.random() * gameHeight);
         } else {
-            // Bottom side of the game window
+
             xPos = (int) (Math.random() * gameWidth);
             yPos = gameHeight;
         }
 
         return   factory.createSpaceShip(xPos, yPos, 1500, this.defender);
-        // Create the SpaceShip with the generated position
-        //SpaceShip newSpaceShip = new SpaceShip(xPos, yPos, 1500, this.defender);
-        // Make the SpaceShip shoot a Missile towards the defender
-
-      //  return newSpaceShip;
     }
 
     @Override

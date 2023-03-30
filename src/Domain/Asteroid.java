@@ -44,8 +44,6 @@ public class Asteroid extends JPanel  implements ComonInterFace {
         }
         g2.drawPolygon(new Polygon(xpoints, ypoints, xpoints.length));
     }
-
-    //ray casting algorithm
     public boolean isPointInsidePolygon(int x, int y) {
         int[][] points = createPolygon();
         int[] xpoints = points[0];

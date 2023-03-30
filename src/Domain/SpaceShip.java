@@ -76,7 +76,6 @@ public class SpaceShip extends JPanel implements ComonInterFace {
     public Missile shoot(Point point) {
         if(System.currentTimeMillis() - spawnTime > 1000)
           return   missile = factory.createMissile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
-           // return new Missile(xPosition, yPosition, (int)point.getX(),(int) point.getY());
         else
             return null;
     }
@@ -143,7 +142,6 @@ public class SpaceShip extends JPanel implements ComonInterFace {
     protected void paintComponent(Graphics g) {
 
         super.paintComponent(g);
-        //   draw((Graphics2D) g,xPosition,yPosition);
     }
 
     @Override

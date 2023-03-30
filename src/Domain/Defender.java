@@ -58,22 +58,20 @@ public class Defender extends JPanel implements DefenderInterface {
             yPosition = 0;
         }
 
-        // Calculate the angle between the polygon and the target point
+
         double angle = Math.atan2(targetY - yPosition, targetX - xPosition);
 
-        // Rotate the graphics context by the calculated angle
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.rotate(angle + Math.PI / 2, xPosition, yPosition);
-        // Draw the polygon
+
         g.drawPolygon(xPoints, yPoints, xPoints.length);
         this.angle = -angle - Math.PI / 2;
-        // Reset the graphics context
+
         g2d.rotate(this.angle, xPosition, yPosition);
     }
 
     public Missile shot(int x, int y, int dx, int dy) {
-        // x and y position of the defender to reach the point where the missile is shot
-
         Missile missile = factory.createMissile(xPosition, yPosition, dx, dy);
         return missile;
     }
@@ -95,15 +93,15 @@ public class Defender extends JPanel implements DefenderInterface {
     }
 
     public Polygon getSpaceShipPolygon() {
-        // create a new array to store the rotated points
+
         int[] rotatedXPoints = new int[xPoints.length];
         int[] rotatedYPoints = new int[yPoints.length];
 
-        // calculate sine and cosine of the angle
+
         double sinTheta = -Math.sin(angle);
         double cosTheta = Math.cos(angle);
 
-        // rotate each point around the center of the polygon
+
         for (int i = 0; i < xPoints.length; i++) {
             int dx = xPoints[i] - xPosition;
             int dy = yPoints[i] - yPosition;
@@ -111,7 +109,7 @@ public class Defender extends JPanel implements DefenderInterface {
             rotatedXPoints[i] = (int) (dx * cosTheta - dy * sinTheta) + xPosition;
             rotatedYPoints[i] = (int) (dx * sinTheta + dy * cosTheta) + yPosition;
         }
-        // create and return the rotated polygon
+
         return new Polygon(rotatedXPoints, rotatedYPoints, xPoints.length);
     }
 
@@ -139,19 +137,19 @@ public class Defender extends JPanel implements DefenderInterface {
 
     public void accelerate(KeyEvent keyEvent, Point mousePosition) {
         int keyCode = keyEvent.getKeyCode();
-        // Calculate the angle between the object and the mouse cursor
+
         double angle = Math.atan2(mousePosition.getY() - this.yPosition, mousePosition.getX() - this.xPosition);
 
         switch (keyCode) {
             case KeyEvent.VK_UP:
-                // Update the x and y velocities based on the angle
+
                 this.velocityX += Math.cos(angle) * this.thrustPower;
                 this.velocityY += Math.sin(angle) * this.thrustPower;
 
                 break;
 
             case KeyEvent.VK_DOWN:
-                // Reduce the speed by a fraction
+
                 this.velocityX *= 0.9;
                 this.velocityY *= 0.9;
 
@@ -161,11 +159,10 @@ public class Defender extends JPanel implements DefenderInterface {
     }
 
     public void move() {
-        // Update the position based on the velocity
+
         this.xPosition += this.velocityX;
         this.yPosition += this.velocityY;
 
-        // Update the points of the polygon based on the new position
         this.xPoints = new int[] { xPosition, xPosition + size, xPosition, xPosition - size };
         this.yPoints = new int[] { yPosition, yPosition + 2 * size, yPosition + size, yPosition + 2 * size };
 

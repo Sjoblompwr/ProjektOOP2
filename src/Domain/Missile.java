@@ -50,13 +50,13 @@ public class Missile extends JPanel implements ComonInterFace {
     }
     
     public void move() {
-        Point thirdPoint = calculateThirdPoint(new Point(x, y), new Point(dx, dy)); // calculate the third point
-        dx = (int) thirdPoint.getX(); // set the new x coordinate
-        dy = (int) thirdPoint.getY(); // set the new y coordinate
-        double distance = Math.sqrt(Math.pow(dx - x, 2) + Math.pow(dy - y, 2)); // calculate distance between endpoints
-        double percentage = speed / distance; // calculate percentage of distance to travel each frame
-        x += (int) Math.round((dx - x) * percentage); // move x coordinate based on percentage
-        y += (int) Math.round((dy - y) * percentage); // move y coordinate based on percentage
+        Point thirdPoint = calculateThirdPoint(new Point(x, y), new Point(dx, dy));
+        dx = (int) thirdPoint.getX();
+        dy = (int) thirdPoint.getY();
+        double distance = Math.sqrt(Math.pow(dx - x, 2) + Math.pow(dy - y, 2));
+        double percentage = speed / distance;
+        x += (int) Math.round((dx - x) * percentage);
+        y += (int) Math.round((dy - y) * percentage);
         this.setLocation(x, y);
 
         if(x < 0 || x > GameSize.SMALL.getWidth() || y < 0 || y > GameSize.SMALL.getHeight()) {
@@ -64,12 +64,12 @@ public class Missile extends JPanel implements ComonInterFace {
         }
     }
     public static Point calculateThirdPoint(Point p1, Point p2) {
-        double distance = p1.distance(p2); // calculate distance between the two points
-        double dx = (p2.getX() - p1.getX()) / distance; // calculate the x distance ratio
-        double dy = (p2.getY() - p1.getY()) / distance; // calculate the y distance ratio
-        double newX = p2.getX() + dx * GameSize.SMALL.getWidth() ; // calculate the new x coordinate that is 700 pixels away
-        double newY = p2.getY() + dy * GameSize.SMALL.getHeight(); // calculate the new y coordinate that is 700 pixels away
-        return new Point((int) newX, (int) newY); // create a new point and return it
+        double distance = p1.distance(p2);
+        double dx = (p2.getX() - p1.getX()) / distance;
+        double dy = (p2.getY() - p1.getY()) / distance;
+        double newX = p2.getX() + dx * GameSize.SMALL.getWidth() ;
+        double newY = p2.getY() + dy * GameSize.SMALL.getHeight();
+        return new Point((int) newX, (int) newY);
     }
     
     

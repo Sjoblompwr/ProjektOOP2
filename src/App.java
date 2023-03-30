@@ -41,12 +41,9 @@ class Game extends JFrame {
     }
 
     public void buildMenu() {
-        // Create menu panel with options
+
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new GridLayout(3, 1));
-
-    
-        // Asteroid count spinner
         JLabel asteroidLabel = new JLabel("Asteroid count:");
         SpinnerModel asteroidModel = new SpinnerNumberModel(10, 1, 100, 1); // Initial value, min, max, step
         JSpinner asteroidSpinner = new JSpinner(asteroidModel);
@@ -58,8 +55,7 @@ class Game extends JFrame {
     
         JPanel scrollPanel = new JPanel();
         menuPanel.add(scrollPanel);
-    
-        // Start game button
+
         JButton startGameButton = new JButton("Start game");
         startGameButton.addActionListener(e -> {
             gameContainer = new GameBuilder()
@@ -78,13 +74,11 @@ class Game extends JFrame {
     
 
     public void menu(){
-                // Create menu panel with options
                 JPanel menuPanel = new JPanel();
                 menuPanel.setLayout(new GridLayout(3, 1));
                 Command playCommand = new PlayCommand(menuPanel);
                 Command controlsCommand = new ControlsCommand();
                 Command exitCommand = new ExitCommand();
-                //Menu state?
                 JButton playButton = new JButton("Play Game");
                 playButton.addKeyListener(new KeyAdapter() {
                     public void keyPressed(KeyEvent e) {
