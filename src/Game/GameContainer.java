@@ -189,7 +189,7 @@ public class GameContainer extends JPanel implements Pointable,KeyListener{
             }
 
         }catch (Exception e){
-
+            System.out.println("ERROR");
         }
 
     }
